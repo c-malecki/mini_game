@@ -1,0 +1,31 @@
+dependencies:
+  controller_driver:
+    dependencies: []
+    source:
+      path: components/controller_driver
+      type: local
+    version: 0.1.0
+  idf:
+    source:
+      type: idf
+    version: 6.0.1
+  sh1106:
+    dependencies: []
+    source:
+      path: components/sh1106
+      type: local
+    version: 1.0.1
+  sound_driver:
+    dependencies: []
+    source:
+      path: components/sound_driver
+      type: local
+    version: 0.1.0
+direct_dependencies:
+- controller_driver
+- idf
+- sh1106
+- sound_driver
+manifest_hash: d280e231277e4c9a35d9facfcb9c6d33b560bff01445df2b97cc6d963d5e9d0b
+target: esp32c6
+version: 3.0.0

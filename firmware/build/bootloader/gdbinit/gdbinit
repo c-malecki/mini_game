@@ -1,0 +1,2 @@
+source /home/chris/Projects/mini_game/firmware/build/bootloader/gdbinit/symbols
+source /home/chris/Projects/mini_game/firmware/build/bootloader/gdbinit/connect

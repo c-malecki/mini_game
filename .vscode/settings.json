@@ -1,0 +1,12 @@
+{
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "clangd.onConfigChangedForceEnable": false,
+    "clangd.path": "/home/chris/.espressif/tools/esp-clang/esp-20.1.1_20250829/esp-clang/bin/clangd",
+    "clangd.arguments": [
+        "--background-index",
+        "--query-driver=**",
+        "--compile-commands-dir=/home/chris/Projects/mini_game/firmware/build"
+  ],
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+}
