@@ -19,4 +19,4 @@ dependencies:
   sound_driver:
     path: ./components/sound_driver
   ssd1306:
-    path: ./components/ssd1306
+    path: ./components/sh1106

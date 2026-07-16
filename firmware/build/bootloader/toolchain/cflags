@@ -1,2 +1,0 @@
-"-specs=/home/chris/Projects/mini_game/firmware/build/bootloader/specs/picolibc.specs"
--march=rv32imac_zicsr_zifencei_zaamo_zalrsc

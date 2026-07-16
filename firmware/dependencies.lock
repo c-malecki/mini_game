@@ -9,23 +9,23 @@ dependencies:
     source:
       type: idf
     version: 6.0.1
-  sh1106:
-    dependencies: []
-    source:
-      path: components/sh1106
-      type: local
-    version: 1.0.1
   sound_driver:
     dependencies: []
     source:
       path: components/sound_driver
       type: local
     version: 0.1.0
+  ssd1306:
+    dependencies: []
+    source:
+      path: components/ssd1306
+      type: local
+    version: 1.1.2
 direct_dependencies:
 - controller_driver
 - idf
-- sh1106
 - sound_driver
-manifest_hash: d280e231277e4c9a35d9facfcb9c6d33b560bff01445df2b97cc6d963d5e9d0b
+- ssd1306
+manifest_hash: 4ca4670e608919176e66ffc9de2e087327e2ccecf9921a70d720569df8a5228d
 target: esp32c6
 version: 3.0.0
