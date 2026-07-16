@@ -33,10 +33,11 @@ typedef enum {
 
 typedef struct
 {
+    adc_oneshot_unit_handle_t adc_handle;
     Controller_Directions last_direction;
     bool is_moving;
 } Controller_t;
 
-void Controller_Init(Controller_t *controller);
+void Controller_Init(Controller_t *controller, adc_oneshot_unit_handle_t adc_handle);
 
 #endif // __CONTROLLER_DRIVER_H_

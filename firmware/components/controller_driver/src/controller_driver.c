@@ -5,33 +5,27 @@
 #include <stdlib.h>
 
 static QueueHandle_t event_queue = NULL;
-static adc_oneshot_unit_handle_t adc_handle = NULL;
 
 static void IRAM_ATTR gpio_isr_handler(void *arg) {
   uint32_t gpio_num = (uint32_t)arg;
   xQueueSendFromISR(event_queue, &gpio_num, NULL);
 }
 
-static void gpio_init(void) {
+static void controls_init(Controller_t *controller,
+                          adc_oneshot_unit_handle_t adc_handle) {
   // joystick
-
-  adc_oneshot_unit_init_cfg_t init_config = {
-      .unit_id = ADC_UNIT_1,
-      .ulp_mode = ADC_ULP_MODE_DISABLE,
-  };
-  ESP_ERROR_CHECK(adc_oneshot_new_unit(&init_config, &adc_handle));
-
   adc_oneshot_chan_cfg_t chan_config = {
       .bitwidth = ADC_BITWIDTH_12,
       .atten = ADC_ATTEN_DB_12,
   };
+  controller->adc_handle = adc_handle;
 
-  ESP_ERROR_CHECK(adc_oneshot_config_channel(adc_handle, CONTROLLER_JOYSTICK_X,
-                                             &chan_config));
-  ESP_ERROR_CHECK(adc_oneshot_config_channel(adc_handle, CONTROLLER_JOYSTICK_Y,
-                                             &chan_config));
-  ESP_ERROR_CHECK(
-      adc_oneshot_config_channel(adc_handle, ADC_CHANNEL_0, &chan_config));
+  ESP_ERROR_CHECK(adc_oneshot_config_channel(
+      controller->adc_handle, CONTROLLER_JOYSTICK_X, &chan_config));
+  ESP_ERROR_CHECK(adc_oneshot_config_channel(
+      controller->adc_handle, CONTROLLER_JOYSTICK_Y, &chan_config));
+  ESP_ERROR_CHECK(adc_oneshot_config_channel(controller->adc_handle,
+                                             ADC_CHANNEL_0, &chan_config));
 
   // buttons
 
@@ -57,10 +51,10 @@ static void joystick_task(void *arg) {
   int y_raw_val = 0;
 
   while (1) {
-    ESP_ERROR_CHECK(
-        adc_oneshot_read(adc_handle, CONTROLLER_JOYSTICK_X, &x_raw_val));
-    ESP_ERROR_CHECK(
-        adc_oneshot_read(adc_handle, CONTROLLER_JOYSTICK_Y, &y_raw_val));
+    ESP_ERROR_CHECK(adc_oneshot_read(controller->adc_handle,
+                                     CONTROLLER_JOYSTICK_X, &x_raw_val));
+    ESP_ERROR_CHECK(adc_oneshot_read(controller->adc_handle,
+                                     CONTROLLER_JOYSTICK_Y, &y_raw_val));
 
     int dx = x_raw_val - CONTROLLER_JOYSTICK_CENTER;
     int dy = y_raw_val - CONTROLLER_JOYSTICK_CENTER;
@@ -125,8 +119,9 @@ static void button_task(void *arg) {
   }
 }
 
-void Controller_Init(Controller_t *controller) {
-  gpio_init();
+void Controller_Init(Controller_t *controller,
+                     adc_oneshot_unit_handle_t adc_handle) {
+  controls_init(controller, adc_handle);
   xTaskCreate(joystick_task, "joystick_task", 2048, controller, 4, NULL);
   xTaskCreate(button_task, "button_task", 2048, NULL, 10, NULL);
 }

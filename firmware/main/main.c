@@ -24,10 +24,18 @@ static App_t app;
 void app_main(void) {
   esp_log_level_set("i2c", ESP_LOG_DEBUG);
 
+  static adc_oneshot_unit_handle_t adc_handle;
+
+  adc_oneshot_unit_init_cfg_t init_config = {
+      .unit_id = ADC_UNIT_1,
+      .ulp_mode = ADC_ULP_MODE_DISABLE,
+  };
+  ESP_ERROR_CHECK(adc_oneshot_new_unit(&init_config, &adc_handle));
+
   Display_Init(&app.display);
   // Sound_Init(&app.music_player);
-  Controller_Init(&app.controls);
-  Battery_Init(&app.battery);
+  Controller_Init(&app.controls, adc_handle);
+  Battery_Init(&app.battery, adc_handle);
   // Sound_PlayTrack(&mario);
 
   // Display_Flush(&app.display);

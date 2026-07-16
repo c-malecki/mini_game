@@ -9,7 +9,7 @@ float Battery_ReadVoltage(adc_oneshot_unit_handle_t shared_adc_handle) {
   // Sample multiple times to overcome high-impedance source drift
   for (int i = 0; i < BAT_SAMPLE_COUNT; i++) {
     ESP_ERROR_CHECK(
-        adc_oneshot_read(shared_adc_handle, ADC_CHANNEL_0, &raw_adc_value));
+        adc_oneshot_read(shared_adc_handle, BATTERY_ADC_CH, &raw_adc_value));
     adc_accumulator += raw_adc_value;
   }
 
@@ -29,12 +29,12 @@ float Battery_ReadVoltage(adc_oneshot_unit_handle_t shared_adc_handle) {
 static void battery_monitor_task(void *arg) {
   Battery_t *battery = (Battery_t *)arg;
   while (1) {
-    if (battery->adc1_handle != NULL) {
+    if (battery->adc_handle != NULL) {
       int raw_adc_value = 0;
       long long adc_accumulator = 0;
 
       for (int i = 0; i < 8; i++) {
-        adc_oneshot_read(battery->adc1_handle, ADC_CHANNEL_0, &raw_adc_value);
+        adc_oneshot_read(battery->adc_handle, BATTERY_ADC_CH, &raw_adc_value);
         adc_accumulator += raw_adc_value;
       }
 
@@ -49,7 +49,15 @@ static void battery_monitor_task(void *arg) {
   }
 }
 
-void Battery_Init(Battery_t *battery) {
+void Battery_Init(Battery_t *battery, adc_oneshot_unit_handle_t adc_handle) {
+  adc_oneshot_chan_cfg_t chan_config = {
+      .bitwidth = ADC_BITWIDTH_12,
+      .atten = ADC_ATTEN_DB_12,
+  };
+  battery->adc_handle = adc_handle;
+  ESP_ERROR_CHECK(adc_oneshot_config_channel(battery->adc_handle,
+                                             BATTERY_ADC_CH, &chan_config));
+
   xTaskCreate(battery_monitor_task, // Function name
               "battery_task",       // Thread debug name
               2048,                 // Stack allocation size
