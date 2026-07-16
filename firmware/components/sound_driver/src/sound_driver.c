@@ -8,7 +8,7 @@ static uint32_t current_bpm = 120; // Default tempo setting (120 BPM)
 
 static void sound_task(void *pvParameters);
 
-void MusicPlayer_Init(MusicPlayer_t *mp) {
+void Sound_Init(Sound_t *mp) {
   ledc_timer_config_t timer_cfg = {.speed_mode = SOUND_DRIVER_MODE,
                                    .timer_num = SOUND_DRIVER_TIMER,
                                    .duty_resolution = SOUND_DRIVER_RESOLUTION,
@@ -33,9 +33,9 @@ void MusicPlayer_Init(MusicPlayer_t *mp) {
   );
 }
 
-void MusicPlayer_PlayTrack(const Track_t *track) { current_track = track; }
+void Sound_PlayTrack(const Track_t *track) { current_track = track; }
 
-void MusicPlayer_SetTempo(uint32_t bpm) {
+void Sound_SetTempo(uint32_t bpm) {
   if (bpm > 0) {
     current_bpm = bpm;
   }

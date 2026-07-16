@@ -49,11 +49,11 @@ static void battery_monitor_task(void *arg) {
   }
 }
 
-void Battery_Task(void) {
+void Battery_Init(Battery_t *battery) {
   xTaskCreate(battery_monitor_task, // Function name
               "battery_task",       // Thread debug name
               2048,                 // Stack allocation size
-              NULL,                 // Parameter inputs
+              battery,              // Parameter inputs
               2,   // Low Priority (battery shifts are non-urgent)
               NULL // Thread handle reference
   );

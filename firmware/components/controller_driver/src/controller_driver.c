@@ -71,12 +71,12 @@ static void joystick_task(void *arg) {
     } else if (abs(dx) > abs(dy)) {
       controller->last_direction =
           dx > 0 ? CONTROLLER_DIRECTION_LEFT : CONTROLLER_DIRECTION_RIGHT;
-      printf("%s", dx > 0 ? "LEFT" : "RIGHT");
+      printf("%s", dx > 0 ? "LEFT\n" : "RIGHT\n");
       controller->is_moving = true;
     } else {
       controller->last_direction =
           dy > 0 ? CONTROLLER_DIRECTION_DOWN : CONTROLLER_DIRECTION_UP;
-      printf("%s", dx > 0 ? "DOWN" : "LEFT");
+      printf("%s", dy > 0 ? "DOWN\n" : "UP\n");
       controller->is_moving = true;
     }
 

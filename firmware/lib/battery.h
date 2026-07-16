@@ -13,6 +13,6 @@ typedef struct
     float voltage;
 } Battery_t;
 
-void Battery_Task(void);
+void Battery_Init(Battery_t *battery);
 
 #endif // __BATTERY_H_

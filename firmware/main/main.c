@@ -2,6 +2,7 @@
 // #include <stdio.h>
 //
 #include "main.h"
+#include "battery.h"
 #include "controller_driver.h"
 #include "display.h"
 #include "esp_err.h"
@@ -9,32 +10,37 @@
 #include "sound_driver.h"
 #include "tracks.h"
 
+/*
+#include "game.h"
+#include <stdio.h>
+
+static Player_t player = { .x = 64, .y = 32, .speed = 2 };
+*/
+
 static const char *TAG = "GAME_TEST";
 
-App_t app;
+static App_t app;
 
 void app_main(void) {
   esp_log_level_set("i2c", ESP_LOG_DEBUG);
 
   Display_Init(&app.display);
-  MusicPlayer_Init(&app.music_player);
+  // Sound_Init(&app.music_player);
   Controller_Init(&app.controls);
+  Battery_Init(&app.battery);
+  // Sound_PlayTrack(&mario);
 
-  MusicPlayer_PlayTrack(&mario);
-
-  Display_DrawCirc(&app.display, 10, 10, 10, false);
-  Display_Flush(&app.display);
+  // Display_Flush(&app.display);
 
   while (1) {
+    // Game_Update(&player, &app.controls);
+    // Game_Render(&app.display, &player);
+    // vTaskDelay(pdMS_TO_TICKS(33));
 
-    // Execute your game logic here
-    // Update_Game_Physics();
+    Display_DrawFloat(&app.display, 20, 20, app.battery.voltage, 2, true);
+    Display_Flush(&app.display);
 
-    // Draw directly to your OLED screen here
-    // Display_Render_Frame(&app.display);
-
-    // Match this sleep to your target frame-rate (e.g., 33ms delay = ~30 FPS)
-    vTaskDelay(pdMS_TO_TICKS(33));
+    vTaskDelay(pdMS_TO_TICKS(5000));
   }
 }
 

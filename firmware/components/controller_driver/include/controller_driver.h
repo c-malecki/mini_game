@@ -9,7 +9,7 @@
 #define CONTROLLER_JOYSTICK_Y ADC_CHANNEL_0
 // Calibration thresholds based on 12-bit ADC (0 to 4095)
 #define CONTROLLER_JOYSTICK_CENTER 2048
-#define CONTROLLER_JOYSTICK_DEADZONE 800 // Prevent drifting near center
+#define CONTROLLER_JOYSTICK_DEADZONE 500 // Prevent drifting near center
 
 #define CONTROLLER_JOYSTICK_THRESHOLD_LOW                                                          \
     (CONTROLLER_JOYSTICK_CENTER - CONTROLLER_JOYSTICK_DEADZONE) // ~1548

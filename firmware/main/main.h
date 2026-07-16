@@ -16,7 +16,7 @@ typedef struct
 {
     SemaphoreHandle_t data_mutex;
     Display_t display;
-    MusicPlayer_t music_player;
+    Sound_t music_player;
     Battery_t battery;
     Controller_t controls;
 } App_t;

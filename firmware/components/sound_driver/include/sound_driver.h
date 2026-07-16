@@ -157,10 +157,10 @@ typedef struct
 {
     Track_t *current_track;
     TaskHandle_t sound_task;
-} MusicPlayer_t;
+} Sound_t;
 
-void MusicPlayer_Init(MusicPlayer_t *mp);
-void MusicPlayer_PlayTrack(const Track_t *track);
-void MusicPlayer_SetTempo(uint32_t bpm);
+void Sound_Init(Sound_t *mp);
+void Sound_PlayTrack(const Track_t *track);
+void Sound_SetTempo(uint32_t bpm);
 
 #endif // __SOUND_DRIVER_H_
