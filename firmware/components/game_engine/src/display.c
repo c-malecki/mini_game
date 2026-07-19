@@ -10,6 +10,8 @@
 #include <string.h>
 
 static i2c_master_bus_handle_t i2c_bus_handle = NULL;
+static esp_lcd_panel_handle_t panel_handle = NULL;
+static uint8_t buffer[DISPLAY_WIDTH * DISPLAY_HEIGHT / 8];
 
 const unsigned char font7x12[] = {
     0x00, 0x00, 0x00, 0x00, 0x31, 0x4A, 0x44, 0x4A, 0x31, // 0
@@ -149,7 +151,7 @@ const unsigned char font7x12[] = {
     0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f  // 127
 };
 
-void Display_Init(Display_t *display) {
+void Display_Init(void) {
   i2c_master_bus_config_t i2c_bus_cfg = {
       .clk_source = I2C_CLK_SRC_DEFAULT,
       .i2c_port = I2C_NUM_0,
@@ -197,10 +199,8 @@ void Display_Init(Display_t *display) {
   };
 
   // Create the panel handle from the sh1106 driver
-  esp_lcd_panel_handle_t panel_handle = NULL;
   ESP_ERROR_CHECK(
       esp_lcd_new_panel_sh1106(io_handle, &panel_config, &panel_handle));
-  display->panel = panel_handle;
 
   // Reset the screen (no reset pin, so it's a no-op here, optional)
   ESP_ERROR_CHECK(esp_lcd_panel_reset(panel_handle));
@@ -210,36 +210,12 @@ void Display_Init(Display_t *display) {
 
   // Turn on the screen (Easier to see something, right?)
   ESP_ERROR_CHECK(esp_lcd_panel_disp_on_off(panel_handle, true));
+
+  Display_DrawRect(20, 20, 10, 10, true);
+  Display_Flush();
 }
 
-void Display_Test(Display_t *display) {
-  uint8_t buffer_data[SH1106_BUFFER_SIZE];
-  memset(buffer_data, 0, SH1106_BUFFER_SIZE);
-
-  buffer_data[0] = 0b00000001;
-  buffer_data[SH1106_BUFFER_SIZE - 1] = 0b10000000;
-
-  ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(display->panel, 0, 0, SH1106_WIDTH,
-                                            SH1106_HEIGHT, buffer_data));
-  vTaskDelay(pdMS_TO_TICKS(2000));
-
-  memset(buffer_data, 0xFF, SH1106_BUFFER_SIZE);
-  ESP_ERROR_CHECK(
-      esp_lcd_panel_draw_bitmap(display->panel, 48, 16, 80, 48, buffer_data));
-  vTaskDelay(pdMS_TO_TICKS(2000));
-
-  memset(buffer_data, 0x00, SH1106_BUFFER_SIZE);
-  memset(buffer_data, 0xFF, 8);
-  for (int y = 0; y < SH1106_HEIGHT; y += 8) {
-    for (int x = 0; x < SH1106_WIDTH; x += 8) {
-      ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(display->panel, x, y, x + 8,
-                                                y + 8, buffer_data));
-      vTaskDelay(pdMS_TO_TICKS(50));
-    }
-  }
-}
-
-void Display_DrawPixl(Display_t *display, int x, int y, bool on) {
+void Display_DrawPixl(int x, int y, bool on) {
   if (x < 0 || x >= DISPLAY_WIDTH || y < 0 || y >= DISPLAY_HEIGHT)
     return;
 
@@ -247,20 +223,19 @@ void Display_DrawPixl(Display_t *display, int x, int y, bool on) {
   uint8_t bit = 1 << (y % 8);
 
   if (on) {
-    display->buffer[index] |= bit;
+    buffer[index] |= bit;
   } else {
-    display->buffer[index] &= ~bit;
+    buffer[index] &= ~bit;
   }
 }
 
-void Display_DrawLine(Display_t *display, int x0, int y0, int x1, int y1,
-                      bool on) {
+void Display_DrawLine(int x0, int y0, int x1, int y1, bool on) {
   int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
   int dy = -abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
   int err = dx + dy;
 
   while (1) {
-    Display_DrawPixl(display, x0, y0, on);
+    Display_DrawPixl(x0, y0, on);
     if (x0 == x1 && y0 == y1)
       break;
     int e2 = 2 * err;
@@ -275,46 +250,45 @@ void Display_DrawLine(Display_t *display, int x0, int y0, int x1, int y1,
   }
 }
 
-void Display_DrawRect(Display_t *display, int x, int y, int w, int hgt,
-                      bool fill) {
+void Display_DrawRect(int x, int y, int w, int hgt, bool fill) {
   if (fill) {
     for (int j = y; j < y + hgt; j++) {
-      Display_DrawLine(display, x, j, x + w - 1, j, true);
+      Display_DrawLine(x, j, x + w - 1, j, true);
     }
   } else {
-    Display_DrawLine(display, x, y, x + w - 1, y, true);
-    Display_DrawLine(display, x, y + hgt - 1, x + w - 1, y + hgt - 1, true);
-    Display_DrawLine(display, x, y, x, y + hgt - 1, true);
-    Display_DrawLine(display, x + w - 1, y, x + w - 1, y + hgt - 1, true);
+    Display_DrawLine(x, y, x + w - 1, y, true);
+    Display_DrawLine(x, y + hgt - 1, x + w - 1, y + hgt - 1, true);
+    Display_DrawLine(x, y, x, y + hgt - 1, true);
+    Display_DrawLine(x + w - 1, y, x + w - 1, y + hgt - 1, true);
   }
 }
 
-void Display_ClearRect(Display_t *display, int x, int y, int w, int hgt) {
+void Display_ClearRect(int x, int y, int w, int hgt) {
   for (int j = y; j < y + hgt; j++) {
     for (int i = x; i < x + w; i++) {
-      Display_DrawPixl(display, i, j, false);
+      Display_DrawPixl(i, j, false);
     }
   }
 }
 
-void Display_DrawCirc(Display_t *display, int xc, int yc, int r, bool fill) {
+void Display_DrawCirc(int xc, int yc, int r, bool fill) {
   int x = r, y = 0, err = 0;
 
   while (x >= y) {
     if (fill) {
-      Display_DrawLine(display, xc - x, yc + y, xc + x, yc + y, true);
-      Display_DrawLine(display, xc - x, yc - y, xc + x, yc - y, true);
-      Display_DrawLine(display, xc - y, yc + x, xc + y, yc + x, true);
-      Display_DrawLine(display, xc - y, yc - x, xc + y, yc - x, true);
+      Display_DrawLine(xc - x, yc + y, xc + x, yc + y, true);
+      Display_DrawLine(xc - x, yc - y, xc + x, yc - y, true);
+      Display_DrawLine(xc - y, yc + x, xc + y, yc + x, true);
+      Display_DrawLine(xc - y, yc - x, xc + y, yc - x, true);
     } else {
-      Display_DrawPixl(display, xc + x, yc + y, true);
-      Display_DrawPixl(display, xc + y, yc + x, true);
-      Display_DrawPixl(display, xc - y, yc + x, true);
-      Display_DrawPixl(display, xc - x, yc + y, true);
-      Display_DrawPixl(display, xc - x, yc - y, true);
-      Display_DrawPixl(display, xc - y, yc - x, true);
-      Display_DrawPixl(display, xc + y, yc - x, true);
-      Display_DrawPixl(display, xc + x, yc - y, true);
+      Display_DrawPixl(xc + x, yc + y, true);
+      Display_DrawPixl(xc + y, yc + x, true);
+      Display_DrawPixl(xc - y, yc + x, true);
+      Display_DrawPixl(xc - x, yc + y, true);
+      Display_DrawPixl(xc - x, yc - y, true);
+      Display_DrawPixl(xc - y, yc - x, true);
+      Display_DrawPixl(xc + y, yc - x, true);
+      Display_DrawPixl(xc + x, yc - y, true);
     }
 
     y += 1;
@@ -328,7 +302,7 @@ void Display_DrawCirc(Display_t *display, int xc, int yc, int r, bool fill) {
   }
 }
 
-void Display_DrawChar(Display_t *display, int x, int y, char c, bool on) {
+void Display_DrawChar(int x, int y, char c, bool on) {
   unsigned char idx = (unsigned char)c;
   if (idx > 127)
     return;
@@ -342,30 +316,28 @@ void Display_DrawChar(Display_t *display, int x, int y, char c, bool on) {
         glyph[row] & 0x7F; // bit 7 is descender flag, not pixel data
     for (int col = 0; col < FONT_7X12_WIDTH; col++) {
       if (row_bits & (1 << (6 - col))) {
-        Display_DrawPixl(display, x + col, y + row + y_offset, on);
+        Display_DrawPixl(x + col, y + row + y_offset, on);
       }
     }
   }
 }
 
-void Display_DrawText(Display_t *display, int x, int y, const char *text,
-                      bool on) {
+void Display_DrawText(int x, int y, const char *text, bool on) {
   int cursor_x = x;
   while (*text) {
-    Display_DrawChar(display, cursor_x, y, *text, on);
+    Display_DrawChar(cursor_x, y, *text, on);
     cursor_x += FONT_7X12_WIDTH + 1; // 7px glyph + 1px spacing
     text++;
   }
 }
 
-void Display_DrawFloat(Display_t *display, int x, int y, float value,
-                       int decimals, bool on) {
+void Display_DrawFloat(int x, int y, float value, int decimals, bool on) {
   char buf[16];
   snprintf(buf, sizeof(buf), "%.*f", decimals, value);
-  Display_DrawText(display, x, y, buf, on);
+  Display_DrawText(x, y, buf, on);
 }
 
-void Display_Flush(Display_t *display) {
-  ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(display->panel, 0, 0, DISPLAY_WIDTH,
-                                            DISPLAY_HEIGHT, display->buffer));
+void Display_Flush() {
+  ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(panel_handle, 0, 0, DISPLAY_WIDTH,
+                                            DISPLAY_HEIGHT, buffer));
 }

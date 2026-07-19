@@ -2,17 +2,16 @@
 #define __SOUND_DRIVER_H_
 
 #include <stdint.h>
-#include "freertos/idf_additions.h"
+#include <stdbool.h>
 
-#define SOUND_DRIVER_PWM_PIN 21
+#define SOUND_DRIVER_PWM_PIN 21 // D3
 #define SOUND_DRIVER_TIMER LEDC_TIMER_0
 #define SOUND_DRIVER_MODE LEDC_LOW_SPEED_MODE
 #define SOUND_DRIVER_CHANNEL LEDC_CHANNEL_0
 // 0-1023 duty steps
 #define SOUND_DRIVER_RESOLUTION LEDC_TIMER_10_BIT
-
 #define SOUND_DRIVER_DUTY_OFF (0)
-#define SOUND_DRIVER_DUTY_ON (512)
+#define SOUND_DRIVER_DUTY_ON (128)
 
 //
 #define NOTE_REST 0
@@ -142,7 +141,7 @@ typedef enum {
 
 typedef struct
 {
-    int frequency;
+    int32_t frequency;
     Note_Duration_t duration_ms;
 } Note_t;
 
@@ -153,14 +152,9 @@ typedef struct
     const Note_t **phrases;
 } Track_t;
 
-typedef struct
-{
-    Track_t *current_track;
-    TaskHandle_t sound_task;
-} Sound_t;
-
-void Sound_Init(Sound_t *mp);
+void Sound_Init(void);
 void Sound_PlayTrack(const Track_t *track);
 void Sound_SetTempo(uint32_t bpm);
+void Sound_TriggerSFX(void); // Expose the interrupt trigger
 
 #endif // __SOUND_DRIVER_H_

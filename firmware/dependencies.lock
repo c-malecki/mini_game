@@ -1,10 +1,20 @@
 dependencies:
-  controller_driver:
+  device_system:
     dependencies: []
     source:
-      path: components/controller_driver
+      path: components/device_system
       type: local
-    version: 0.1.0
+    version: '*'
+  game_engine:
+    dependencies:
+    - name: idf
+      version: '>=4.1.0'
+    - name: sh1106
+      path: ./components/sh1106
+    source:
+      path: components/game_engine
+      type: local
+    version: '*'
   idf:
     source:
       type: idf
@@ -12,20 +22,14 @@ dependencies:
   sh1106:
     dependencies: []
     source:
-      path: components/sh1106
+      path: components/game_engine/components/sh1106
       type: local
     version: 1.0.1
-  sound_driver:
-    dependencies: []
-    source:
-      path: components/sound_driver
-      type: local
-    version: 0.1.0
 direct_dependencies:
-- controller_driver
+- device_system
+- game_engine
 - idf
 - sh1106
-- sound_driver
-manifest_hash: fa4528c3fc2c8485d309e915cc5565f7b94aac162ac70ba869b058d562fd33f0
+manifest_hash: b442afdaa9b70ef7c012f3143ddcfb2089a2f127fea240bac7ef002873cd8132
 target: esp32c6
 version: 3.0.0

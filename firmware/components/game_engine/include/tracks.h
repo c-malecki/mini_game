@@ -1,7 +1,7 @@
 #ifndef __TRACKS_H_
 #define __TRACKS_H_
 
-#include "sound_driver.h"
+#include "sound.h"
 
 extern const Track_t mario;
 

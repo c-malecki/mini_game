@@ -1071,441 +1071,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Mini_Game:Joystick_Generic"
-			(pin_names
-				(offset 0)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "S1"
-				(at 0 11.43 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.524 1.524)
-					)
-				)
-			)
-			(property "Value" "Joystick_Generic"
-				(at 0 8.89 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.524 1.524)
-					)
-				)
-			)
-			(property "Footprint" "digikey-footprints:Switch_Nav_12.4x12.4mm_SMD_JS5208"
-				(at 5.08 5.08 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.524 1.524)
-					)
-					(justify left)
-				)
-			)
-			(property "Datasheet" "http://spec_sheets.e-switch.com/specs/P200020.pdf"
-				(at 5.08 7.62 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.524 1.524)
-					)
-					(justify left)
-				)
-			)
-			(property "Description" "SWITCH NAVIGATION 20MA 15V"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Digi-Key_PN" "EG4561-ND"
-				(at 5.08 10.16 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.524 1.524)
-					)
-					(justify left)
-				)
-			)
-			(property "MPN" "JS5208"
-				(at 5.08 12.7 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.524 1.524)
-					)
-					(justify left)
-				)
-			)
-			(property "Category" "Switches"
-				(at 5.08 15.24 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.524 1.524)
-					)
-					(justify left)
-				)
-			)
-			(property "Family" "Navigation Switches, Joystick"
-				(at 5.08 17.78 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.524 1.524)
-					)
-					(justify left)
-				)
-			)
-			(property "DK_Datasheet_Link" "http://spec_sheets.e-switch.com/specs/P200020.pdf"
-				(at 5.08 20.32 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.524 1.524)
-					)
-					(justify left)
-				)
-			)
-			(property "DK_Detail_Page" "/product-detail/en/e-switch/JS5208/EG4561-ND/1739634"
-				(at 5.08 22.86 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.524 1.524)
-					)
-					(justify left)
-				)
-			)
-			(property "Description_1" "SWITCH NAVIGATION 20MA 15V"
-				(at 5.08 25.4 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.524 1.524)
-					)
-					(justify left)
-				)
-			)
-			(property "Manufacturer" "E-Switch"
-				(at 5.08 27.94 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.524 1.524)
-					)
-					(justify left)
-				)
-			)
-			(property "Status" "Active"
-				(at 5.08 30.48 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.524 1.524)
-					)
-					(justify left)
-				)
-			)
-			(property "ki_keywords" "EG4561-ND JS5208"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "Joystick_Generic_0_1"
-				(rectangle
-					(start -5.08 6.35)
-					(end 5.08 -7.62)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(polyline
-					(pts
-						(xy -5.08 5.08) (xy 1.905 -1.905)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -5.08 0) (xy -3.81 0)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -5.08 -5.08) (xy -2.54 -5.08) (xy -2.54 -6.35)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center -3.175 0)
-					(radius 0.635)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(circle
-					(center 0 3.175)
-					(radius 0.635)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(circle
-					(center 0 0)
-					(radius 0.635)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(circle
-					(center 0 -3.175)
-					(radius 0.635)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(circle
-					(center 3.175 0)
-					(radius 0.635)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
-						(xy 5.08 5.08) (xy 0 5.08) (xy 0 3.81)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 5.08 0) (xy 3.81 0)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 5.08 -5.08) (xy 0 -5.08) (xy 0 -3.81)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "Joystick_Generic_1_1"
-				(pin power_in line
-					(at -10.16 5.08 0)
-					(length 5.08)
-					(name "+5V"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at -10.16 0 0)
-					(length 5.08)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -10.16 -5.08 0)
-					(length 5.08)
-					(name "Button"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 10.16 5.08 180)
-					(length 5.08)
-					(name "VRx"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 10.16 0 180)
-					(length 5.08)
-					(name "VRy"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 10.16 -5.08 180)
-					(length 5.08)
-					(name "SW"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "6"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Seeed_Studio_XIAO_Series:XIAO-ESP32-C6-SMD"
 			(pin_names
 				(offset 1.016)
@@ -2849,10 +2414,6 @@
 		(uuid "2c0d193d-c146-4982-814b-23ee1efd060c")
 	)
 	(no_connect
-		(at 55.88 33.02)
-		(uuid "3422b191-3971-4f2d-a0c9-9c8c21980a16")
-	)
-	(no_connect
 		(at 105.41 48.26)
 		(uuid "36e79c48-3806-4b56-a1ca-214ddaa29d6e")
 	)
@@ -2879,10 +2440,6 @@
 	(no_connect
 		(at 113.03 48.26)
 		(uuid "d49cb177-f139-4185-9139-98d4434a625b")
-	)
-	(no_connect
-		(at 77.47 33.02)
-		(uuid "db525e31-daf6-4b60-bda6-003d34fd0af3")
 	)
 	(wire
 		(pts
@@ -2936,13 +2493,13 @@
 	)
 	(wire
 		(pts
-			(xy 82.55 63.5) (xy 93.98 63.5)
+			(xy 93.98 82.55) (xy 93.98 135.89)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "2983a868-e564-4f25-910b-7e3c7b6536a9")
+		(uuid "2d0dcdde-fd17-42b9-b30a-33f3bf2786cf")
 	)
 	(wire
 		(pts
@@ -2963,6 +2520,16 @@
 			(type default)
 		)
 		(uuid "3afc78b1-458d-483a-8e88-7b02b0892314")
+	)
+	(wire
+		(pts
+			(xy 50.8 63.5) (xy 50.8 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3cde5ded-ab8c-43d7-86c5-5f768f5479c0")
 	)
 	(wire
 		(pts
@@ -3026,6 +2593,16 @@
 	)
 	(wire
 		(pts
+			(xy 71.12 135.89) (xy 71.12 137.795)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4cfa4565-489f-4caf-ae53-f161d97ba920")
+	)
+	(wire
+		(pts
 			(xy 90.17 74.93) (xy 93.98 74.93)
 		)
 		(stroke
@@ -3033,16 +2610,6 @@
 			(type default)
 		)
 		(uuid "4d49b13a-ecd0-4b50-8394-950fe258baec")
-	)
-	(wire
-		(pts
-			(xy 82.55 27.94) (xy 82.55 63.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4d76bd1e-e03c-4c11-bd63-53a5bcd8d5bd")
 	)
 	(wire
 		(pts
@@ -3076,16 +2643,6 @@
 	)
 	(wire
 		(pts
-			(xy 88.9 22.86) (xy 88.9 59.69)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5806d7a4-a4b9-4870-a682-9640fb05c9c9")
-	)
-	(wire
-		(pts
 			(xy 234.95 72.39) (xy 234.95 78.74)
 		)
 		(stroke
@@ -3113,16 +2670,6 @@
 			(type default)
 		)
 		(uuid "5b980464-cf51-4320-a25f-a120d57b2552")
-	)
-	(wire
-		(pts
-			(xy 51.435 27.94) (xy 51.435 29.21)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "65f678c2-d446-49fd-85b3-5060134d362b")
 	)
 	(wire
 		(pts
@@ -3163,16 +2710,6 @@
 			(type default)
 		)
 		(uuid "6d67b481-e7a3-4346-be43-e5b56a54ce1a")
-	)
-	(wire
-		(pts
-			(xy 88.9 59.69) (xy 93.98 59.69)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6df7c1f9-ad5c-440b-ab24-063cdd775552")
 	)
 	(wire
 		(pts
@@ -3226,6 +2763,16 @@
 	)
 	(wire
 		(pts
+			(xy 93.98 135.89) (xy 81.28 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "837fb174-c2c3-4636-af76-5aa099f38aa4")
+	)
+	(wire
+		(pts
 			(xy 249.555 24.765) (xy 249.555 29.21)
 		)
 		(stroke
@@ -3233,16 +2780,6 @@
 			(type default)
 		)
 		(uuid "8692b417-c1d0-47f3-94e1-410b7e4edd06")
-	)
-	(wire
-		(pts
-			(xy 76.2 27.94) (xy 82.55 27.94)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8f7491f7-83ff-4b97-9089-ce29e2fc30a9")
 	)
 	(wire
 		(pts
@@ -3276,16 +2813,6 @@
 	)
 	(wire
 		(pts
-			(xy 76.2 33.02) (xy 77.47 33.02)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9f50bb8d-2af1-4760-b6bd-8582408f8a5c")
-	)
-	(wire
-		(pts
 			(xy 139.7 121.92) (xy 142.875 121.92)
 		)
 		(stroke
@@ -3293,6 +2820,16 @@
 			(type default)
 		)
 		(uuid "a1905ba7-0453-4fe5-a6ef-a06a4e200f48")
+	)
+	(wire
+		(pts
+			(xy 40.64 58.42) (xy 40.64 60.325)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a4dd5707-4232-4712-a5cc-8ca41696f9fa")
 	)
 	(wire
 		(pts
@@ -3326,6 +2863,16 @@
 	)
 	(wire
 		(pts
+			(xy 50.8 63.5) (xy 93.98 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b36835eb-f22e-40c5-b295-7b596cbe71cf")
+	)
+	(wire
+		(pts
 			(xy 50.8 86.36) (xy 50.8 95.25)
 		)
 		(stroke
@@ -3333,16 +2880,6 @@
 			(type default)
 		)
 		(uuid "b37e3bfe-d0d1-4cf1-91ce-0f9326e70daf")
-	)
-	(wire
-		(pts
-			(xy 76.2 22.86) (xy 88.9 22.86)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b827671a-7c1c-4cd7-b6f7-9ec6d457ab72")
 	)
 	(wire
 		(pts
@@ -3376,6 +2913,16 @@
 	)
 	(wire
 		(pts
+			(xy 54.61 30.48) (xy 54.61 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c3f09b53-f744-4948-850f-fc2f63eaa21e")
+	)
+	(wire
+		(pts
 			(xy 249.555 48.895) (xy 249.555 50.165)
 		)
 		(stroke
@@ -3393,6 +2940,16 @@
 			(type default)
 		)
 		(uuid "c6aa6c23-c7cd-4ed2-861b-6fdf929aed4c")
+	)
+	(wire
+		(pts
+			(xy 54.61 59.69) (xy 93.98 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cdb60da3-26dc-443a-b593-98164b356b9a")
 	)
 	(wire
 		(pts
@@ -3433,6 +2990,16 @@
 			(type default)
 		)
 		(uuid "d0d1aa61-a22a-4568-95a7-9ec42d72fc03")
+	)
+	(wire
+		(pts
+			(xy 44.45 30.48) (xy 44.45 32.385)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d43c8509-8566-4af9-a6b8-ce9f83eec97d")
 	)
 	(wire
 		(pts
@@ -3483,26 +3050,6 @@
 			(type default)
 		)
 		(uuid "e578bea7-0909-495a-9212-6d91885cb00d")
-	)
-	(wire
-		(pts
-			(xy 51.435 27.94) (xy 55.88 27.94)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e5a08086-e954-4a88-a86a-28a2d7550efc")
-	)
-	(wire
-		(pts
-			(xy 186.055 123.19) (xy 186.055 125.095)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e849f8bc-8412-49da-b58a-0f25303364bd")
 	)
 	(wire
 		(pts
@@ -4025,6 +3572,87 @@
 		)
 	)
 	(symbol
+		(lib_id "Switch:SW_Push")
+		(at 49.53 30.48 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "236851d7-441a-4b52-9774-34092cc1c390")
+		(property "Reference" "SW7"
+			(at 49.53 22.225 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SW_Push"
+			(at 49.53 24.765 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 49.53 25.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 49.53 25.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Push button switch, generic, two pins"
+			(at 49.53 30.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "e7b0a40b-a42b-45fb-978c-9bb5a7ae5b2f")
+		)
+		(pin "2"
+			(uuid "a707d685-8b37-4deb-9b5f-9a63573b1976")
+		)
+		(instances
+			(project "mini_game"
+				(path "/7b14a4fe-4b29-4a90-b4ef-5dd9096bd6ea"
+					(reference "SW7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:Buzzer")
 		(at 254.635 22.225 0)
 		(unit 1)
@@ -4101,6 +3729,167 @@
 			(project "mini_game"
 				(path "/7b14a4fe-4b29-4a90-b4ef-5dd9096bd6ea"
 					(reference "BZ1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GNDREF")
+		(at 40.64 60.325 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "29503dcf-430d-4d5d-a98a-a8ed385cb4ca")
+		(property "Reference" "#PWR016"
+			(at 40.64 66.675 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GNDREF"
+			(at 40.64 65.405 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 40.64 60.325 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 40.64 60.325 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GNDREF\" , reference supply ground"
+			(at 40.64 60.325 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "a310d85e-e24d-4834-a537-c2c36091ad93")
+		)
+		(instances
+			(project "mini_game"
+				(path "/7b14a4fe-4b29-4a90-b4ef-5dd9096bd6ea"
+					(reference "#PWR016")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push")
+		(at 45.72 58.42 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "2ecd2b8a-0ae5-4dfb-91a5-c280589dd7ee")
+		(property "Reference" "SW8"
+			(at 45.72 50.165 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SW_Push"
+			(at 45.72 52.705 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 45.72 53.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 45.72 53.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Push button switch, generic, two pins"
+			(at 45.72 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "5549d643-cf93-4c8d-add8-61ae1253fff2")
+		)
+		(pin "2"
+			(uuid "0b8b7052-406a-4cdf-9f30-f25df57f20ec")
+		)
+		(instances
+			(project "mini_game"
+				(path "/7b14a4fe-4b29-4a90-b4ef-5dd9096bd6ea"
+					(reference "SW8")
 					(unit 1)
 				)
 			)
@@ -4582,8 +4371,9 @@
 		)
 	)
 	(symbol
-		(lib_id "Mini_Game:Joystick_Generic")
-		(at 66.04 27.94 0)
+		(lib_id "power:GNDREF")
+		(at 44.45 32.385 0)
+		(mirror y)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4592,53 +4382,9 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "61a90027-0d96-4e21-96e7-bdd80ba83480")
-		(property "Reference" "S2"
-			(at 66.04 17.145 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.524 1.524)
-				)
-			)
-		)
-		(property "Value" "Joystick_Generic"
-			(at 66.04 19.685 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.524 1.524)
-				)
-			)
-		)
-		(property "Footprint" "digikey-footprints:Switch_Nav_12.4x12.4mm_SMD_JS5208"
-			(at 71.12 22.86 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.524 1.524)
-				)
-				(justify left)
-			)
-		)
-		(property "Datasheet" "http://spec_sheets.e-switch.com/specs/P200020.pdf"
-			(at 71.12 20.32 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.524 1.524)
-				)
-				(justify left)
-			)
-		)
-		(property "Description" "SWITCH NAVIGATION 20MA 15V"
-			(at 66.04 27.94 0)
+		(uuid "691f3a6d-90b6-4298-8f91-b7eb198a0dc0")
+		(property "Reference" "#PWR015"
+			(at 44.45 38.735 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4648,136 +4394,57 @@
 				)
 			)
 		)
-		(property "Digi-Key_PN" "EG4561-ND"
-			(at 71.12 17.78 0)
+		(property "Value" "GNDREF"
+			(at 44.45 37.465 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
-					(size 1.524 1.524)
+					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "MPN" "JS5208"
-			(at 71.12 15.24 0)
+		(property "Footprint" ""
+			(at 44.45 32.385 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
-					(size 1.524 1.524)
+					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Category" "Switches"
-			(at 71.12 12.7 0)
+		(property "Datasheet" ""
+			(at 44.45 32.385 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
-					(size 1.524 1.524)
+					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Family" "Navigation Switches, Joystick"
-			(at 71.12 10.16 0)
+		(property "Description" "Power symbol creates a global label with name \"GNDREF\" , reference supply ground"
+			(at 44.45 32.385 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
-					(size 1.524 1.524)
+					(size 1.27 1.27)
 				)
-				(justify left)
 			)
-		)
-		(property "DK_Datasheet_Link" "http://spec_sheets.e-switch.com/specs/P200020.pdf"
-			(at 71.12 7.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.524 1.524)
-				)
-				(justify left)
-			)
-		)
-		(property "DK_Detail_Page" "/product-detail/en/e-switch/JS5208/EG4561-ND/1739634"
-			(at 71.12 5.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.524 1.524)
-				)
-				(justify left)
-			)
-		)
-		(property "Description_1" "SWITCH NAVIGATION 20MA 15V"
-			(at 71.12 2.54 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.524 1.524)
-				)
-				(justify left)
-			)
-		)
-		(property "Manufacturer" "E-Switch"
-			(at 71.12 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.524 1.524)
-				)
-				(justify left)
-			)
-		)
-		(property "Status" "Active"
-			(at 71.12 -2.54 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.524 1.524)
-				)
-				(justify left)
-			)
-		)
-		(pin "2"
-			(uuid "b46a2af5-69d3-4fd0-8c4b-65fccd364868")
-		)
-		(pin "3"
-			(uuid "cc4738ae-f16b-4d2b-85aa-0afc58149ba7")
-		)
-		(pin "4"
-			(uuid "ed2d6a49-9b22-489e-9758-f7344cecb094")
 		)
 		(pin "1"
-			(uuid "d54c9641-8529-4ebc-a81d-f647f2bc61db")
-		)
-		(pin "5"
-			(uuid "86bf6d2d-2b78-4b87-b5ad-17c9e2701f9b")
-		)
-		(pin "6"
-			(uuid "0da4d42b-c087-4f86-9d8a-0dacdbd84bb8")
+			(uuid "0a253caa-b11e-48a7-9fda-c8a7f413823b")
 		)
 		(instances
 			(project "mini_game"
 				(path "/7b14a4fe-4b29-4a90-b4ef-5dd9096bd6ea"
-					(reference "S2")
+					(reference "#PWR015")
 					(unit 1)
 				)
 			)
@@ -4949,7 +4616,8 @@
 	)
 	(symbol
 		(lib_id "power:GNDREF")
-		(at 51.435 29.21 0)
+		(at 71.12 137.795 0)
+		(mirror y)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4958,9 +4626,9 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "797b92e9-e37d-497d-84e4-7240be90b99a")
-		(property "Reference" "#PWR07"
-			(at 51.435 35.56 0)
+		(uuid "7d0dadf2-64e2-4913-8938-b4de3effced2")
+		(property "Reference" "#PWR017"
+			(at 71.12 144.145 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4971,7 +4639,7 @@
 			)
 		)
 		(property "Value" "GNDREF"
-			(at 51.435 34.29 0)
+			(at 71.12 142.875 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4982,7 +4650,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 51.435 29.21 0)
+			(at 71.12 137.795 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4993,7 +4661,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 51.435 29.21 0)
+			(at 71.12 137.795 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5004,7 +4672,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GNDREF\" , reference supply ground"
-			(at 51.435 29.21 0)
+			(at 71.12 137.795 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5015,12 +4683,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "d3196bef-0224-4b3b-a091-d24f6414fe4c")
+			(uuid "b7d2c4fb-37bb-4b4e-878f-829d8685e141")
 		)
 		(instances
 			(project "mini_game"
 				(path "/7b14a4fe-4b29-4a90-b4ef-5dd9096bd6ea"
-					(reference "#PWR07")
+					(reference "#PWR017")
 					(unit 1)
 				)
 			)
@@ -5100,6 +4768,87 @@
 			(project "mini_game"
 				(path "/7b14a4fe-4b29-4a90-b4ef-5dd9096bd6ea"
 					(reference "#PWR010")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_Push")
+		(at 76.2 135.89 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "842a3b08-3892-4ebb-a92c-d226bc81ce65")
+		(property "Reference" "SW9"
+			(at 76.2 127.635 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SW_Push"
+			(at 76.2 130.175 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 76.2 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 76.2 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Push button switch, generic, two pins"
+			(at 76.2 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f12c91de-9bef-41a9-9c84-15720393139a")
+		)
+		(pin "2"
+			(uuid "8ec4131a-5eac-4feb-86ea-c24302ddc696")
+		)
+		(instances
+			(project "mini_game"
+				(path "/7b14a4fe-4b29-4a90-b4ef-5dd9096bd6ea"
+					(reference "SW9")
 					(unit 1)
 				)
 			)

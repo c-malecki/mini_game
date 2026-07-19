@@ -1,4 +1,5 @@
-#include "sound_driver.h"
+#include "tracks.h"
+#include "sound.h"
 #include <stdint.h>
 
 // --- Intro Section ---
@@ -132,7 +133,9 @@ const uint8_t mario_order[] = {
     6           // Hook section
 };
 
-const Track_t mario = {.order = mario_order,
-                       .order_len =
-                           sizeof(mario_order) / sizeof(mario_order[0]),
-                       .phrases = mario_phrases};
+const Track_t mario = {
+    .order = mario_order,
+    .order_len = sizeof(mario_order) / sizeof(mario_order[0]),
+    .phrases = mario_phrases,
+
+};

@@ -2,12 +2,10 @@
 // #include <stdio.h>
 //
 #include "main.h"
-#include "battery.h"
-#include "controller_driver.h"
-#include "display.h"
 #include "esp_err.h"
 #include "esp_log.h"
-#include "sound_driver.h"
+#include "freertos/FreeRTOS.h"
+#include "game_engine.h"
 #include "tracks.h"
 
 /*
@@ -24,31 +22,22 @@ static App_t app;
 void app_main(void) {
   esp_log_level_set("i2c", ESP_LOG_DEBUG);
 
-  static adc_oneshot_unit_handle_t adc_handle;
+  Device_System_Init(&app.device_system);
+  Game_Engine_Init(&app.game_engine);
 
-  adc_oneshot_unit_init_cfg_t init_config = {
-      .unit_id = ADC_UNIT_1,
-      .ulp_mode = ADC_ULP_MODE_DISABLE,
-  };
-  ESP_ERROR_CHECK(adc_oneshot_new_unit(&init_config, &adc_handle));
-
-  Display_Init(&app.display);
-  // Sound_Init(&app.music_player);
-  Controller_Init(&app.controls, adc_handle);
-  Battery_Init(&app.battery, adc_handle);
-  // Sound_PlayTrack(&mario);
+  Game_Engine_PlayTrack(&mario);
 
   // Display_Flush(&app.display);
 
   while (1) {
     // Game_Update(&player, &app.controls);
     // Game_Render(&app.display, &player);
-    // vTaskDelay(pdMS_TO_TICKS(33));
+    vTaskDelay(pdMS_TO_TICKS(33));
 
-    Display_DrawFloat(&app.display, 20, 20, app.battery.voltage, 2, true);
-    Display_Flush(&app.display);
+    // Display_DrawFloat(&app.display, 20, 20, app.battery.voltage, 2, true);
+    // Display_Flush(&app.display);
 
-    vTaskDelay(pdMS_TO_TICKS(5000));
+    // vTaskDelay(pdMS_TO_TICKS(5000));
   }
 }
 
