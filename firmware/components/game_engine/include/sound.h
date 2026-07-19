@@ -154,7 +154,9 @@ typedef struct
 
 void Sound_Init(void);
 void Sound_PlayTrack(const Track_t *track);
+void Sound_TogglePauseTrack(void);
 void Sound_SetTempo(uint32_t bpm);
 void Sound_TriggerSFX(void); // Expose the interrupt trigger
+void Sound_CleanUp(void);
 
 #endif // __SOUND_DRIVER_H_

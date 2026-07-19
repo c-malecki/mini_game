@@ -250,6 +250,27 @@ void Display_DrawLine(int x0, int y0, int x1, int y1, bool on) {
   }
 }
 
+void Display_ClearLine(int x0, int y0, int x1, int y1) {
+  int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+  int dy = -abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+  int err = dx + dy;
+
+  while (1) {
+    Display_DrawPixl(x0, y0, false); // Clear pixel
+    if (x0 == x1 && y0 == y1)
+      break;
+    int e2 = 2 * err;
+    if (e2 >= dy) {
+      err += dy;
+      x0 += sx;
+    }
+    if (e2 <= dx) {
+      err += dx;
+      y0 += sy;
+    }
+  }
+}
+
 void Display_DrawRect(int x, int y, int w, int hgt, bool fill) {
   if (fill) {
     for (int j = y; j < y + hgt; j++) {
@@ -302,6 +323,35 @@ void Display_DrawCirc(int xc, int yc, int r, bool fill) {
   }
 }
 
+void Display_ClearCirc(int xc, int yc, int r, bool fill) {
+  int x = r, y = 0, err = 0;
+  while (x >= y) {
+    if (fill) {
+      Display_ClearLine(xc - x, yc + y, xc + x, yc + y);
+      Display_ClearLine(xc - x, yc - y, xc + x, yc - y);
+      Display_ClearLine(xc - y, yc + x, xc + y, yc + x);
+      Display_ClearLine(xc - y, yc - x, xc + y, yc - x);
+    } else {
+      Display_DrawPixl(xc + x, yc + y, false);
+      Display_DrawPixl(xc + y, yc + x, false);
+      Display_DrawPixl(xc - y, yc + x, false);
+      Display_DrawPixl(xc - x, yc + y, false);
+      Display_DrawPixl(xc - x, yc - y, false);
+      Display_DrawPixl(xc - y, yc - x, false);
+      Display_DrawPixl(xc + y, yc - x, false);
+      Display_DrawPixl(xc + x, yc - y, false);
+    }
+    y += 1;
+    if (err <= 0) {
+      err += 2 * y + 1;
+    }
+    if (err > 0) {
+      x -= 1;
+      err -= 2 * x + 1;
+    }
+  }
+}
+
 void Display_DrawChar(int x, int y, char c, bool on) {
   unsigned char idx = (unsigned char)c;
   if (idx > 127)
@@ -322,6 +372,25 @@ void Display_DrawChar(int x, int y, char c, bool on) {
   }
 }
 
+void Display_ClearChar(int x, int y, char c) {
+  unsigned char idx = (unsigned char)c;
+  if (idx > 127)
+    return;
+
+  const unsigned char *glyph = &font7x12[idx * 9];
+  bool descender = (glyph[0] & 0x80) != 0;
+  int y_offset = descender ? FONT_7X12_DESCENDER_OFFSET : 0;
+
+  for (int row = 0; row < FONT_7X12_HEIGHT; row++) {
+    uint8_t row_bits = glyph[row] & 0x7F;
+    for (int col = 0; col < FONT_7X12_WIDTH; col++) {
+      if (row_bits & (1 << (6 - col))) {
+        Display_DrawPixl(x + col, y + row + y_offset, false);
+      }
+    }
+  }
+}
+
 void Display_DrawText(int x, int y, const char *text, bool on) {
   int cursor_x = x;
   while (*text) {
@@ -331,10 +400,25 @@ void Display_DrawText(int x, int y, const char *text, bool on) {
   }
 }
 
+void Display_ClearText(int x, int y, const char *text) {
+  int cursor_x = x;
+  while (*text) {
+    Display_ClearChar(cursor_x, y, *text);
+    cursor_x += FONT_7X12_WIDTH + 1; // 7px glyph + 1px spacing
+    text++;
+  }
+}
+
 void Display_DrawFloat(int x, int y, float value, int decimals, bool on) {
   char buf[16];
   snprintf(buf, sizeof(buf), "%.*f", decimals, value);
   Display_DrawText(x, y, buf, on);
+}
+
+void Display_ClearFloat(int x, int y, float value, int decimals) {
+  char buf[16];
+  snprintf(buf, sizeof(buf), "%.*f", decimals, value);
+  Display_ClearText(x, y, buf);
 }
 
 void Display_Flush() {

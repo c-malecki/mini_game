@@ -9,7 +9,10 @@
 static const Track_t *current_track = NULL;
 static TaskHandle_t sound_task_handle = NULL;
 static uint32_t current_bpm = 160;
+
 static volatile bool sfx_pending;
+static volatile bool track_paused;
+
 static int32_t master_volume;
 
 // Track the state of the active music note so SFX can pause/resume cleanly
@@ -41,6 +44,11 @@ void Sound_Init() {
 void Sound_PlayTrack(const Track_t *track) {
   current_track = track;
   active_note_remaining_ms = 0;
+}
+
+void Sound_TogglePauseTrack(void) {
+  bool val = !track_paused;
+  track_paused = val;
 }
 
 void Sound_SetTempo(uint32_t bpm) {
@@ -114,6 +122,10 @@ static void sound_engine_task(void *arg) {
 
     // ─── PART 2: MUSIC PHRASE SEQUENCER (TICK-BASED) ───
     if (current_track != NULL) {
+      if (track_paused) {
+        vTaskDelay(pdMS_TO_TICKS(100));
+        continue;
+      }
       // If the last note finished playing, load up the next note in the struct
       // structure
       if (active_note_remaining_ms == 0) {

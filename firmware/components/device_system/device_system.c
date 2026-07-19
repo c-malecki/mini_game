@@ -3,8 +3,6 @@
 #include "include/device_system.h"
 #include <stdint.h>
 
-void Device_System_Init(Device_System_t *dsys) { Battery_Init(); }
+void DSys_Init() { Battery_Init(); }
 
-uint32_t Device_System_ReadBat(Device_System_t *dsys) {
-  return Battery_ReadV();
-}
+float DSys_Battery_Read() { return Battery_ReadV(); }

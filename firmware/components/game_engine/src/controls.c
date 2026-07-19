@@ -2,10 +2,13 @@
 #include "driver/gpio.h"
 #include "esp_timer.h"
 #include "freertos/FreeRTOS.h"
+#include <stdint.h>
 #include <stdlib.h>
 
 static QueueHandle_t event_queue = NULL;
 static void button_task(void *arg);
+static Controls_Buttons pending_btn;
+static Controls_Directions pending_direction;
 
 static void IRAM_ATTR gpio_isr_handler(void *arg) {
   uint32_t gpio_num = (uint32_t)arg;
@@ -13,6 +16,9 @@ static void IRAM_ATTR gpio_isr_handler(void *arg) {
 }
 
 void Controls_Init(Controls_t *controls) {
+  pending_btn = CONTROLS_BUTTON_NONE;
+  pending_direction = CONTROLS_DIRECTION_NONE;
+
   gpio_config_t io_cfg = {.pin_bit_mask = INPUT_PIN_BITMASK,
                           .mode = GPIO_MODE_INPUT,
                           .pull_up_en = GPIO_PULLUP_ENABLE,
@@ -24,24 +30,39 @@ void Controls_Init(Controls_t *controls) {
 
   gpio_install_isr_service(0);
 
-  gpio_isr_handler_add(CONTROLS_BUTTON_A, gpio_isr_handler,
-                       (void *)CONTROLS_BUTTON_A);
-  gpio_isr_handler_add(CONTROLS_BUTTON_B, gpio_isr_handler,
-                       (void *)CONTROLS_BUTTON_B);
+  gpio_isr_handler_add(CONTROLS_A_PIN, gpio_isr_handler,
+                       (void *)CONTROLS_A_PIN);
+  gpio_isr_handler_add(CONTROLS_B_PIN, gpio_isr_handler,
+                       (void *)CONTROLS_B_PIN);
 
-  gpio_isr_handler_add(CONTROLS_BUTTON_UP, gpio_isr_handler,
-                       (void *)CONTROLS_BUTTON_UP);
-  gpio_isr_handler_add(CONTROLS_BUTTON_DOWN, gpio_isr_handler,
-                       (void *)CONTROLS_BUTTON_DOWN);
-  gpio_isr_handler_add(CONTROLS_BUTTON_LEFT, gpio_isr_handler,
-                       (void *)CONTROLS_BUTTON_LEFT);
-  gpio_isr_handler_add(CONTROLS_BUTTON_RIGHT, gpio_isr_handler,
-                       (void *)CONTROLS_BUTTON_RIGHT);
+  gpio_isr_handler_add(CONTROLS_UP_PIN, gpio_isr_handler,
+                       (void *)CONTROLS_UP_PIN);
+  gpio_isr_handler_add(CONTROLS_DOWN_PIN, gpio_isr_handler,
+                       (void *)CONTROLS_DOWN_PIN);
+  gpio_isr_handler_add(CONTROLS_LEFT_PIN, gpio_isr_handler,
+                       (void *)CONTROLS_LEFT_PIN);
+  gpio_isr_handler_add(CONTROLS_RIGHT_PIN, gpio_isr_handler,
+                       (void *)CONTROLS_RIGHT_PIN);
 
-  gpio_isr_handler_add(CONTROLS_BUTTON_CMD, gpio_isr_handler,
-                       (void *)CONTROLS_BUTTON_CMD);
+  gpio_isr_handler_add(CONTROLS_CMD_PIN, gpio_isr_handler,
+                       (void *)CONTROLS_CMD_PIN);
 
   xTaskCreate(button_task, "button_task", 2048, NULL, 10, NULL);
+}
+
+Controls_Buttons Controls_GetPendingBtn(void) {
+  Controls_Buttons btn = pending_btn;
+  return btn;
+}
+
+Controls_Directions Controls_GetPendingDirection(void) {
+  Controls_Directions dir = pending_direction;
+  return dir;
+}
+
+void Controls_CleanUp(void) {
+  pending_direction = CONTROLS_DIRECTION_NONE;
+  pending_btn = CONTROLS_BUTTON_NONE;
 }
 
 static void button_task(void *arg) {
@@ -65,64 +86,71 @@ static void button_task(void *arg) {
 
       switch (io_num) {
 
-      case CONTROLS_BUTTON_A:
+      case CONTROLS_A_PIN:
         if ((current_time - last_press_time_a) > CONTROLS_DEBOUNCE_MS) {
           if (gpio_get_level(io_num) == 0) {
-            printf("EVENT: Button A Pressed!\n");
+            pending_btn = CONTROLS_BUTTON_A;
+            printf("A\n");
             last_press_time_a = current_time;
           }
         }
         break;
 
-      case CONTROLS_BUTTON_B:
+      case CONTROLS_B_PIN:
         if ((current_time - last_press_time_b) > CONTROLS_DEBOUNCE_MS) {
           if (gpio_get_level(io_num) == 0) {
-            printf("EVENT: Button B Pressed!\n");
+            pending_btn = CONTROLS_BUTTON_B;
+            printf("B\n");
             last_press_time_b = current_time;
           }
         }
         break;
 
-      case CONTROLS_BUTTON_UP:
-        if ((current_time - last_press_time_up) > CONTROLS_DEBOUNCE_MS) {
-          if (gpio_get_level(io_num) == 0) {
-            printf("EVENT: Button UP Pressed!\n");
-            last_press_time_b = current_time;
-          }
-        }
-        break;
-
-      case CONTROLS_BUTTON_DOWN:
-        if ((current_time - last_press_time_down) > CONTROLS_DEBOUNCE_MS) {
-          if (gpio_get_level(io_num) == 0) {
-            printf("EVENT: Button DOWN Pressed!\n");
-            last_press_time_b = current_time;
-          }
-        }
-        break;
-
-      case CONTROLS_BUTTON_LEFT:
-        if ((current_time - last_press_time_left) > CONTROLS_DEBOUNCE_MS) {
-          if (gpio_get_level(io_num) == 0) {
-            printf("EVENT: Button LEFT Pressed!\n");
-            last_press_time_b = current_time;
-          }
-        }
-        break;
-
-      case CONTROLS_BUTTON_RIGHT:
-        if ((current_time - last_press_time_right) > CONTROLS_DEBOUNCE_MS) {
-          if (gpio_get_level(io_num) == 0) {
-            printf("EVENT: Button RIGHT Pressed!\n");
-            last_press_time_b = current_time;
-          }
-        }
-        break;
-
-      case CONTROLS_BUTTON_CMD:
+      case CONTROLS_CMD_PIN:
         if ((current_time - last_press_time_cmd) > CONTROLS_DEBOUNCE_MS) {
           if (gpio_get_level(io_num) == 0) {
-            printf("EVENT: Button CMD Pressed!\n");
+            pending_btn = CONTROLS_CMD_PIN;
+            printf("CMD\n");
+            last_press_time_b = current_time;
+          }
+        }
+        break;
+
+      case CONTROLS_UP_PIN:
+        if ((current_time - last_press_time_up) > CONTROLS_DEBOUNCE_MS) {
+          if (gpio_get_level(io_num) == 0) {
+            pending_direction = CONTROLS_DIRECTION_UP;
+            printf("UP\n");
+            last_press_time_b = current_time;
+          }
+        }
+        break;
+
+      case CONTROLS_DOWN_PIN:
+        if ((current_time - last_press_time_down) > CONTROLS_DEBOUNCE_MS) {
+          if (gpio_get_level(io_num) == 0) {
+            pending_direction = CONTROLS_DIRECTION_DOWN;
+            printf("DOWN\n");
+            last_press_time_b = current_time;
+          }
+        }
+        break;
+
+      case CONTROLS_LEFT_PIN:
+        if ((current_time - last_press_time_left) > CONTROLS_DEBOUNCE_MS) {
+          if (gpio_get_level(io_num) == 0) {
+            pending_direction = CONTROLS_DIRECTION_LEFT;
+            printf("LEFT\n");
+            last_press_time_b = current_time;
+          }
+        }
+        break;
+
+      case CONTROLS_RIGHT_PIN:
+        if ((current_time - last_press_time_right) > CONTROLS_DEBOUNCE_MS) {
+          if (gpio_get_level(io_num) == 0) {
+            pending_direction = CONTROLS_DIRECTION_RIGHT;
+            printf("RIGHT\n");
             last_press_time_b = current_time;
           }
         }

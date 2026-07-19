@@ -2,42 +2,42 @@
 // #include <stdio.h>
 //
 #include "main.h"
+#include "controls.h"
+#include "device_system.h"
 #include "esp_err.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "game_engine.h"
 #include "tracks.h"
 
-/*
-#include "game.h"
-#include <stdio.h>
-
-static Player_t player = { .x = 64, .y = 32, .speed = 2 };
-*/
-
 static const char *TAG = "GAME_TEST";
+
+static float old_voltage;
+static float new_voltage;
 
 static App_t app;
 
 void app_main(void) {
-  esp_log_level_set("i2c", ESP_LOG_DEBUG);
+  DSys_Init();
+  GEng_Init();
 
-  Device_System_Init(&app.device_system);
-  Game_Engine_Init(&app.game_engine);
-
-  Game_Engine_PlayTrack(&mario);
-
-  // Display_Flush(&app.display);
+  GEng_Sound_PlayTrack(&mario);
+  GEnd_Dsp_Clear();
 
   while (1) {
-    // Game_Update(&player, &app.controls);
-    // Game_Render(&app.display, &player);
-    vTaskDelay(pdMS_TO_TICKS(33));
+    // GEng_HandleInput();
+    // GEng_Display_Render();
+    // GEng_CleanUp();
+    // vTaskDelay(pdMS_TO_TICKS(33));
+    old_voltage = new_voltage;
+    GEng_Display_ClearFloat(20, 20, old_voltage, 2);
 
-    // Display_DrawFloat(&app.display, 20, 20, app.battery.voltage, 2, true);
-    // Display_Flush(&app.display);
+    new_voltage = DSys_Battery_Read();
 
-    // vTaskDelay(pdMS_TO_TICKS(5000));
+    GEng_Display_DrawFloat(20, 20, new_voltage, 2, true);
+    GEng_Display_Flush();
+
+    vTaskDelay(pdMS_TO_TICKS(5000));
   }
 }
 
