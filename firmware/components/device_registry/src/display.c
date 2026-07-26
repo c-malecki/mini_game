@@ -69,9 +69,6 @@ void Display_Init(void) {
   // Turn on the screen (Easier to see something, right?)
   ESP_ERROR_CHECK(esp_lcd_panel_disp_on_off(panel_handle, true));
 
-  Display_Fill();
-  Display_Flush();
-  vTaskDelay(3000);
   Display_Clear();
   Display_Flush();
 }

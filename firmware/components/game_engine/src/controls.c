@@ -17,7 +17,6 @@ static void IRAM_ATTR gpio_isr_handler(void *arg) {
 
 void Controls_Init(void) {
   controls.pending_btn = CONTROLS_BUTTON_NONE;
-  controls.pending_direction = CONTROLS_DIRECTION_NONE;
 
   gpio_config_t io_cfg = {.pin_bit_mask = INPUT_PIN_BITMASK,
                           .mode = GPIO_MODE_INPUT,
@@ -55,15 +54,9 @@ Controls_Buttons Controls_GetPendingBtn(void) {
   return btn;
 }
 
-Controls_Directions Controls_GetPendingDirection(void) {
-  Controls_Directions dir = controls.pending_direction;
-  return dir;
-}
+bool Controls_IsPinHeld(int pin) { return gpio_get_level(pin) == 0; }
 
-void Controls_CleanUp(void) {
-  controls.pending_direction = CONTROLS_DIRECTION_NONE;
-  controls.pending_btn = CONTROLS_BUTTON_NONE;
-}
+void Controls_CleanUp(void) { controls.pending_btn = CONTROLS_BUTTON_NONE; }
 
 static void button_task(void *arg) {
   uint32_t io_num;
@@ -116,7 +109,6 @@ static void button_task(void *arg) {
       case CONTROLS_UP_PIN:
         if ((current_time - last_press_time_up) > CONTROLS_DEBOUNCE_MS) {
           if (gpio_get_level(io_num) == 0) {
-            controls.pending_direction = CONTROLS_DIRECTION_UP;
             last_press_time_up = current_time;
           }
         }
@@ -125,7 +117,6 @@ static void button_task(void *arg) {
       case CONTROLS_DOWN_PIN:
         if ((current_time - last_press_time_down) > CONTROLS_DEBOUNCE_MS) {
           if (gpio_get_level(io_num) == 0) {
-            controls.pending_direction = CONTROLS_DIRECTION_DOWN;
             last_press_time_down = current_time;
           }
         }
@@ -134,7 +125,6 @@ static void button_task(void *arg) {
       case CONTROLS_LEFT_PIN:
         if ((current_time - last_press_time_left) > CONTROLS_DEBOUNCE_MS) {
           if (gpio_get_level(io_num) == 0) {
-            controls.pending_direction = CONTROLS_DIRECTION_LEFT;
             last_press_time_left = current_time;
           }
         }
@@ -143,7 +133,6 @@ static void button_task(void *arg) {
       case CONTROLS_RIGHT_PIN:
         if ((current_time - last_press_time_right) > CONTROLS_DEBOUNCE_MS) {
           if (gpio_get_level(io_num) == 0) {
-            controls.pending_direction = CONTROLS_DIRECTION_RIGHT;
             last_press_time_right = current_time;
           }
         }

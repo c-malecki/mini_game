@@ -19,23 +19,17 @@ void GEng_Init(Player_t player) {
 }
 
 void GEng_LOOP_HandleInput(void) {
-  Controls_Directions dir = Controls_GetPendingDirection();
-
-  switch (dir) {
-  case CONTROLS_DIRECTION_UP:
-    game_engine.player.y -= game_engine.player.speed;
-    break;
-  case CONTROLS_DIRECTION_DOWN:
-    game_engine.player.y += game_engine.player.speed;
-    break;
-  case CONTROLS_DIRECTION_LEFT:
+  if (Controls_IsPinHeld(CONTROLS_LEFT_PIN)) {
     game_engine.player.x -= game_engine.player.speed;
-    break;
-  case CONTROLS_DIRECTION_RIGHT:
+  }
+  if (Controls_IsPinHeld(CONTROLS_RIGHT_PIN)) {
     game_engine.player.x += game_engine.player.speed;
-    break;
-  default:
-    break;
+  }
+  if (Controls_IsPinHeld(CONTROLS_UP_PIN)) {
+    game_engine.player.y -= game_engine.player.speed;
+  }
+  if (Controls_IsPinHeld(CONTROLS_DOWN_PIN)) {
+    game_engine.player.y += game_engine.player.speed;
   }
 
   Controls_Buttons btn = Controls_GetPendingBtn();
@@ -119,19 +113,17 @@ void GEng_SND_TogglePauseTrack(void) { Sound_TogglePauseTrack(); }
 void GEng_SND_PlaySfx(void) { Sound_TriggerSFX(); }
 
 /************ GAME **************/
+
 // set game
 void GEng_GAME_SetPlayer(Player_t player) { game_engine.player = player; }
 
 /************ DEBUG **************/
 
 void GEng_PrintState(void) {
-  if (game_engine.controls.pending_btn != CONTROLS_BUTTON_NONE ||
-      game_engine.controls.pending_direction != CONTROLS_DIRECTION_NONE) {
+  if (game_engine.controls.pending_btn != CONTROLS_BUTTON_NONE) {
 
-    ESP_LOGE("Game Engine",
-             "pending btn: %d\npending dir: %d\nplayer x: %d\n player y: %d\n",
-             game_engine.controls.pending_btn,
-             game_engine.controls.pending_direction, game_engine.player.x,
+    ESP_LOGE("Game Engine", "pending btn: %d\nplayer x: %d\n player y: %d\n",
+             game_engine.controls.pending_btn, game_engine.player.x,
              game_engine.player.y);
   }
 }

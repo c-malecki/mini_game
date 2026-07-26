@@ -20,14 +20,6 @@
      | (1ULL << CONTROLS_CMD_PIN))
 
 typedef enum {
-    CONTROLS_DIRECTION_NONE = 0,
-    CONTROLS_DIRECTION_UP,
-    CONTROLS_DIRECTION_DOWN,
-    CONTROLS_DIRECTION_LEFT,
-    CONTROLS_DIRECTION_RIGHT,
-} Controls_Directions;
-
-typedef enum {
     CONTROLS_BUTTON_NONE = 0,
     CONTROLS_BUTTON_A,
     CONTROLS_BUTTON_B,
@@ -36,13 +28,12 @@ typedef enum {
 
 typedef struct
 {
-    Controls_Directions pending_direction;
     Controls_Buttons pending_btn;
 } Controls_t;
 
 void Controls_Init(void);
 Controls_Buttons Controls_GetPendingBtn(void);
-Controls_Directions Controls_GetPendingDirection(void);
+bool Controls_IsPinHeld(int pin);
 void Controls_CleanUp(void);
 
 #endif // __CONTROLS_DRIVER_H_
