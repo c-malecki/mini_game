@@ -1,117 +1,137 @@
 #include "game_engine.h"
-#include "controls.h"
 #include "display.h"
-#include "sound.h"
-#include "tracks.h"
+#include "esp_log.h"
 
 static Game_Engine_t game_engine;
 
-void GEng_Init() {
-  Player_t player = {.x = 64, .y = 32, .speed = 2};
-  game_engine.player = &player;
-  Display_Init();
-  Sound_Init();
-  Controls_Init(&game_engine.controls);
+/************ GAME ENGINE **************/
+
+void GEng_Init(Player_t player) {
+  game_engine.player = player;
+  game_engine.player.x = 64;
+  game_engine.player.y = 32;
+  game_engine.player.speed = 2;
+
+  DR_Init();
+  ESP_LOGI("GAME_ENGINE", "Device Registry initialized");
+  Controls_Init();
+  ESP_LOGI("GAME_ENGINE", "Controls initialized");
 }
 
-void GEng_Display_DrawLine(int x0, int y0, int x1, int y1, bool on) {
-  Display_DrawLine(x0, y0, x1, y1, on);
-};
-
-void GEng_Display_DrawRect(int x, int y, int w, int hgt, bool fill) {
-  Display_DrawRect(x, y, w, hgt, fill);
-};
-
-void GEng_ClearRect(int x, int y, int w, int hgt) {
-  Display_ClearRect(x, y, w, hgt);
-};
-
-void GEng_Display_DrawCirc(int xc, int yc, int r, bool fill) {
-  Display_DrawCirc(xc, yc, r, fill);
-};
-
-void GEng_Display_DrawChar(int x, int y, char c, bool on) {
-  Display_DrawChar(x, y, c, on);
-};
-
-void GEng_Display_DrawText(int x, int y, const char *text, bool on) {
-  Display_DrawText(x, y, text, on);
-};
-
-void GEng_Display_DrawFloat(int x, int y, float value, int decimals, bool on) {
-  Display_DrawFloat(x, y, value, decimals, on);
-};
-
-void GEng_Display_ClearFloat(int x, int y, float value, int decimals) {
-  Display_ClearFloat(x, y, value, decimals);
-};
-
-// ************Display Exec************
-
-void GEng_Display_Flush() { Display_Flush(); };
-
-void GEnd_Dsp_Clear(void) {
-  GEng_ClearRect(0, 0, 64, 128);
-  GEng_Display_Flush();
-}
-
-void GEng_Display_Render() {
-  GEng_Display_DrawRect(game_engine.player->x, game_engine.player->y, 4, 4,
-                        true);
-  GEng_Display_Flush();
-}
-
-void GEng_CleanUp(void) { Controls_CleanUp(); }
-
-// ***********SOUND*************
-
-void GEng_Sound_PlayTrack(const Track_t *track) { Sound_PlayTrack(track); }
-
-void GEng_Sound_TogglePauseTrack(void) { Sound_TogglePauseTrack(); }
-
-void GEng_Sound_PlaySfx(void) { Sound_TriggerSFX(); }
-
-// ************Game Engine************
-
-void GEng_HandleInput(void) {
+void GEng_LOOP_HandleInput(void) {
   Controls_Directions dir = Controls_GetPendingDirection();
-  Controls_Buttons btn = Controls_GetPendingBtn();
 
   switch (dir) {
   case CONTROLS_DIRECTION_UP:
-    game_engine.player->y -= game_engine.player->speed;
+    game_engine.player.y -= game_engine.player.speed;
     break;
   case CONTROLS_DIRECTION_DOWN:
-    game_engine.player->y += game_engine.player->speed;
+    game_engine.player.y += game_engine.player.speed;
     break;
   case CONTROLS_DIRECTION_LEFT:
-    game_engine.player->x -= game_engine.player->speed;
+    game_engine.player.x -= game_engine.player.speed;
     break;
   case CONTROLS_DIRECTION_RIGHT:
-    game_engine.player->x += game_engine.player->speed;
+    game_engine.player.x += game_engine.player.speed;
     break;
   default:
     break;
   }
 
+  Controls_Buttons btn = Controls_GetPendingBtn();
   switch (btn) {
   case CONTROLS_BUTTON_CMD:
-    GEng_Sound_TogglePauseTrack();
+    GEng_SND_TogglePauseTrack();
     break;
   case CONTROLS_BUTTON_A:
-    GEng_Sound_PlaySfx();
+    GEng_SND_PlaySfx();
     break;
   default:
     break;
   }
 
   // clamp to screen bounds
-  if (game_engine.player->x < 0)
-    game_engine.player->x = 0;
-  if (game_engine.player->y < 0)
-    game_engine.player->y = 0;
-  if (game_engine.player->x >= DISPLAY_WIDTH)
-    game_engine.player->x = DISPLAY_WIDTH - 1;
-  if (game_engine.player->y >= DISPLAY_HEIGHT)
-    game_engine.player->y = DISPLAY_HEIGHT - 1;
+  if (game_engine.player.x < 0) {
+    game_engine.player.x = 0;
+  }
+
+  if (game_engine.player.y < 0) {
+    game_engine.player.y = 0;
+  }
+
+  if (game_engine.player.x >= DISPLAY_WIDTH) {
+    game_engine.player.x = DISPLAY_WIDTH - 1;
+  }
+
+  if (game_engine.player.y >= DISPLAY_HEIGHT) {
+    game_engine.player.y = DISPLAY_HEIGHT - 1;
+  }
+  GEng_PrintState();
+  Controls_CleanUp();
+}
+
+void GEng_LOOP_Render() {
+  // TODO: change so that position is set by game_engine.player
+  static int last_x = 64;
+  static int last_y = 32;
+
+  Display_ClearRect(last_x, last_y, game_engine.player.sprite->width,
+                    game_engine.player.sprite->height);
+  GEng_DSP_DrawSprite(game_engine.player.x, game_engine.player.y,
+                      game_engine.player.sprite, true);
+
+  Display_Flush();
+
+  last_x = game_engine.player.x;
+  last_y = game_engine.player.y;
+}
+
+/************ DISPLAY **************/
+
+void GEng_DSP_Fill(void) {
+  Display_DrawRect(0, 0, 128, 64, true);
+  Display_Flush();
+}
+
+void GEng_DSP_Clear(void) {
+  Display_ClearRect(0, 0, 128, 64);
+  Display_Flush();
+}
+
+void GEng_DSP_DrawSprite(int x, int y, const Sprite_t *sprite, bool on) {
+  int stride = (sprite->width + 7) / 8;
+  for (int row = 0; row < sprite->height; row++) {
+    for (int col = 0; col < sprite->width; col++) {
+      uint8_t byte = sprite->data[row * stride + col / 8];
+      if ((byte >> (7 - (col % 8))) & 1) {
+        Display_DrawPixel(x + col, y + row, on);
+      }
+    }
+  }
+}
+
+/************ SOUND **************/
+
+void GEng_SND_PlayTrack(const Track_t *track) { Sound_PlayTrack(track); }
+
+void GEng_SND_TogglePauseTrack(void) { Sound_TogglePauseTrack(); }
+
+void GEng_SND_PlaySfx(void) { Sound_TriggerSFX(); }
+
+/************ GAME **************/
+// set game
+void GEng_GAME_SetPlayer(Player_t player) { game_engine.player = player; }
+
+/************ DEBUG **************/
+
+void GEng_PrintState(void) {
+  if (game_engine.controls.pending_btn != CONTROLS_BUTTON_NONE ||
+      game_engine.controls.pending_direction != CONTROLS_DIRECTION_NONE) {
+
+    ESP_LOGE("Game Engine",
+             "pending btn: %d\npending dir: %d\nplayer x: %d\n player y: %d\n",
+             game_engine.controls.pending_btn,
+             game_engine.controls.pending_direction, game_engine.player.x,
+             game_engine.player.y);
+  }
 }

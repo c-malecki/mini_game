@@ -1,7 +1,7 @@
 dependencies:
   idf:
     version: '>=4.1.0'
-  device_system:
-    path: ../components/device_system
   game_engine:
-    path: ../components/game_engine
+    path: "../components/game_engine"
+  device_registry:
+    path: ../components/device_registry

@@ -3,6 +3,11 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "driver/ledc.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 #define SOUND_DRIVER_PWM_PIN 21 // D3
 #define SOUND_DRIVER_TIMER LEDC_TIMER_0

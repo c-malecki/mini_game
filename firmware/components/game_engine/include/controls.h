@@ -14,7 +14,6 @@
 
 #define CONTROLS_DEBOUNCE_MS 200
 
-// Bitmask configuration helper
 #define INPUT_PIN_BITMASK                                                                          \
     ((1ULL << CONTROLS_B_PIN) | (1ULL << CONTROLS_A_PIN) | (1ULL << CONTROLS_UP_PIN)               \
      | (1ULL << CONTROLS_DOWN_PIN) | (1ULL << CONTROLS_LEFT_PIN) | (1ULL << CONTROLS_RIGHT_PIN)    \
@@ -39,10 +38,9 @@ typedef struct
 {
     Controls_Directions pending_direction;
     Controls_Buttons pending_btn;
-    bool is_moving;
 } Controls_t;
 
-void Controls_Init(Controls_t *controls);
+void Controls_Init(void);
 Controls_Buttons Controls_GetPendingBtn(void);
 Controls_Directions Controls_GetPendingDirection(void);
 void Controls_CleanUp(void);

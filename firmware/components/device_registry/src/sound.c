@@ -1,21 +1,15 @@
 #include "sound.h"
-#include "driver/ledc.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include <stdio.h>
-#include <stdlib.h>
 
-// Global tracking references
 static const Track_t *current_track = NULL;
 static TaskHandle_t sound_task_handle = NULL;
 static uint32_t current_bpm = 160;
 
 static volatile bool sfx_pending;
 static volatile bool track_paused;
+static volatile bool track_changed;
 
 static int32_t master_volume;
 
-// Track the state of the active music note so SFX can pause/resume cleanly
 static int32_t active_music_freq = NOTE_REST;
 static uint32_t active_note_remaining_ms = 0;
 
@@ -44,6 +38,7 @@ void Sound_Init() {
 void Sound_PlayTrack(const Track_t *track) {
   current_track = track;
   active_note_remaining_ms = 0;
+  track_changed = true;
 }
 
 void Sound_TogglePauseTrack(void) {
@@ -57,12 +52,8 @@ void Sound_SetTempo(uint32_t bpm) {
   }
 }
 
-// Thread-safe function to trigger your laser blast sound effect from game code
 void Sound_TriggerSFX() {
   sfx_pending = true;
-  // Instantly force the sound engine task to wake up from vTaskDelay
-  // to handle the sound effect without waiting for the current musical note
-  // to finish!
   if (sound_task_handle != NULL) {
     xTaskNotifyGive(sound_task_handle);
   }
@@ -71,10 +62,7 @@ void Sound_TriggerSFX() {
 uint32_t calculate_note_ms(Note_Duration_t duration) {
   if (duration == DURATION_END)
     return 0;
-  // Base tempo calculation: 60000ms / BPM = 1/4 note length
   uint32_t quarter_note_ms = 60000 / current_bpm;
-
-  // Scale duration fractions proportionally
   return (quarter_note_ms * 4) / (uint32_t)duration;
 }
 
@@ -122,7 +110,15 @@ static void sound_engine_task(void *arg) {
 
     // ─── PART 2: MUSIC PHRASE SEQUENCER (TICK-BASED) ───
     if (current_track != NULL) {
+      if (track_changed) {
+        track_changed = false;
+        current_phrase = NULL;
+        note_idx = 0;
+        active_note_remaining_ms = 0;
+      }
+
       if (track_paused) {
+        apply_hardware_tone(NOTE_REST);
         vTaskDelay(pdMS_TO_TICKS(100));
         continue;
       }

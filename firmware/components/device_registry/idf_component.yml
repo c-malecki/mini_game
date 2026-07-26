@@ -1,0 +1,5 @@
+dependencies:
+  idf:
+    version: '>=4.1.0'
+  tny-robotics/sh1106-esp-idf:
+    path: "./components/sh1106-esp-idf"

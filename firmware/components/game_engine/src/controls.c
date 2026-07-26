@@ -5,19 +5,19 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+static Controls_t controls;
+
 static QueueHandle_t event_queue = NULL;
 static void button_task(void *arg);
-static Controls_Buttons pending_btn;
-static Controls_Directions pending_direction;
 
 static void IRAM_ATTR gpio_isr_handler(void *arg) {
   uint32_t gpio_num = (uint32_t)arg;
   xQueueSendFromISR(event_queue, &gpio_num, NULL);
 }
 
-void Controls_Init(Controls_t *controls) {
-  pending_btn = CONTROLS_BUTTON_NONE;
-  pending_direction = CONTROLS_DIRECTION_NONE;
+void Controls_Init(void) {
+  controls.pending_btn = CONTROLS_BUTTON_NONE;
+  controls.pending_direction = CONTROLS_DIRECTION_NONE;
 
   gpio_config_t io_cfg = {.pin_bit_mask = INPUT_PIN_BITMASK,
                           .mode = GPIO_MODE_INPUT,
@@ -51,18 +51,18 @@ void Controls_Init(Controls_t *controls) {
 }
 
 Controls_Buttons Controls_GetPendingBtn(void) {
-  Controls_Buttons btn = pending_btn;
+  Controls_Buttons btn = controls.pending_btn;
   return btn;
 }
 
 Controls_Directions Controls_GetPendingDirection(void) {
-  Controls_Directions dir = pending_direction;
+  Controls_Directions dir = controls.pending_direction;
   return dir;
 }
 
 void Controls_CleanUp(void) {
-  pending_direction = CONTROLS_DIRECTION_NONE;
-  pending_btn = CONTROLS_BUTTON_NONE;
+  controls.pending_direction = CONTROLS_DIRECTION_NONE;
+  controls.pending_btn = CONTROLS_BUTTON_NONE;
 }
 
 static void button_task(void *arg) {
@@ -89,8 +89,7 @@ static void button_task(void *arg) {
       case CONTROLS_A_PIN:
         if ((current_time - last_press_time_a) > CONTROLS_DEBOUNCE_MS) {
           if (gpio_get_level(io_num) == 0) {
-            pending_btn = CONTROLS_BUTTON_A;
-            printf("A\n");
+            controls.pending_btn = CONTROLS_BUTTON_A;
             last_press_time_a = current_time;
           }
         }
@@ -99,8 +98,7 @@ static void button_task(void *arg) {
       case CONTROLS_B_PIN:
         if ((current_time - last_press_time_b) > CONTROLS_DEBOUNCE_MS) {
           if (gpio_get_level(io_num) == 0) {
-            pending_btn = CONTROLS_BUTTON_B;
-            printf("B\n");
+            controls.pending_btn = CONTROLS_BUTTON_B;
             last_press_time_b = current_time;
           }
         }
@@ -109,9 +107,8 @@ static void button_task(void *arg) {
       case CONTROLS_CMD_PIN:
         if ((current_time - last_press_time_cmd) > CONTROLS_DEBOUNCE_MS) {
           if (gpio_get_level(io_num) == 0) {
-            pending_btn = CONTROLS_CMD_PIN;
-            printf("CMD\n");
-            last_press_time_b = current_time;
+            controls.pending_btn = CONTROLS_BUTTON_CMD;
+            last_press_time_cmd = current_time;
           }
         }
         break;
@@ -119,9 +116,8 @@ static void button_task(void *arg) {
       case CONTROLS_UP_PIN:
         if ((current_time - last_press_time_up) > CONTROLS_DEBOUNCE_MS) {
           if (gpio_get_level(io_num) == 0) {
-            pending_direction = CONTROLS_DIRECTION_UP;
-            printf("UP\n");
-            last_press_time_b = current_time;
+            controls.pending_direction = CONTROLS_DIRECTION_UP;
+            last_press_time_up = current_time;
           }
         }
         break;
@@ -129,9 +125,8 @@ static void button_task(void *arg) {
       case CONTROLS_DOWN_PIN:
         if ((current_time - last_press_time_down) > CONTROLS_DEBOUNCE_MS) {
           if (gpio_get_level(io_num) == 0) {
-            pending_direction = CONTROLS_DIRECTION_DOWN;
-            printf("DOWN\n");
-            last_press_time_b = current_time;
+            controls.pending_direction = CONTROLS_DIRECTION_DOWN;
+            last_press_time_down = current_time;
           }
         }
         break;
@@ -139,9 +134,8 @@ static void button_task(void *arg) {
       case CONTROLS_LEFT_PIN:
         if ((current_time - last_press_time_left) > CONTROLS_DEBOUNCE_MS) {
           if (gpio_get_level(io_num) == 0) {
-            pending_direction = CONTROLS_DIRECTION_LEFT;
-            printf("LEFT\n");
-            last_press_time_b = current_time;
+            controls.pending_direction = CONTROLS_DIRECTION_LEFT;
+            last_press_time_left = current_time;
           }
         }
         break;
@@ -149,9 +143,8 @@ static void button_task(void *arg) {
       case CONTROLS_RIGHT_PIN:
         if ((current_time - last_press_time_right) > CONTROLS_DEBOUNCE_MS) {
           if (gpio_get_level(io_num) == 0) {
-            pending_direction = CONTROLS_DIRECTION_RIGHT;
-            printf("RIGHT\n");
-            last_press_time_b = current_time;
+            controls.pending_direction = CONTROLS_DIRECTION_RIGHT;
+            last_press_time_right = current_time;
           }
         }
         break;

@@ -1,16 +1,20 @@
 dependencies:
-  device_system:
-    dependencies: []
+  device_registry:
+    dependencies:
+    - name: idf
+      version: '>=4.1.0'
+    - name: tny-robotics/sh1106-esp-idf
+      path: ./components/sh1106-esp-idf
     source:
-      path: components/device_system
+      path: components/device_registry
       type: local
     version: '*'
   game_engine:
     dependencies:
     - name: idf
       version: '>=4.1.0'
-    - name: sh1106
-      path: ./components/sh1106
+    - name: device_registry
+      path: ../device_registry
     source:
       path: components/game_engine
       type: local
@@ -19,17 +23,17 @@ dependencies:
     source:
       type: idf
     version: 6.0.1
-  sh1106:
+  tny-robotics/sh1106-esp-idf:
     dependencies: []
     source:
-      path: components/game_engine/components/sh1106
+      path: components/device_registry/components/sh1106-esp-idf
       type: local
-    version: 1.0.1
+    version: '*'
 direct_dependencies:
-- device_system
+- device_registry
 - game_engine
 - idf
-- sh1106
-manifest_hash: b442afdaa9b70ef7c012f3143ddcfb2089a2f127fea240bac7ef002873cd8132
+- tny-robotics/sh1106-esp-idf
+manifest_hash: 7654f7eb2d73ec39d4e12c7067c1553a9b45f2febec8d6581b4158c4604fc76e
 target: esp32c6
 version: 3.0.0

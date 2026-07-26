@@ -1,12 +1,9 @@
 #include "battery.h"
-#include "esp_adc/adc_oneshot.h"
-#include "esp_err.h"
-#include "freertos/FreeRTOS.h"
 
+static Battery_t battery;
 static adc_oneshot_unit_handle_t adc_handle;
-static float current_voltage;
 
-static void battery_monitor_task(void *arg) {
+void battery_monitor_task(void *arg) {
   while (1) {
     if (adc_handle != NULL) {
       int raw_adc_value = 0;
@@ -20,7 +17,7 @@ static void battery_monitor_task(void *arg) {
       float avg_raw = (float)adc_accumulator / 8.0f;
       float pin_v = (avg_raw / 4095.0f) * 3.3f;
 
-      current_voltage = pin_v * 2.0f;
+      battery.voltage = pin_v * 2.0f;
     }
 
     vTaskDelay(pdMS_TO_TICKS(5000));
@@ -32,7 +29,8 @@ void Battery_Init(void) {
       .unit_id = ADC_UNIT_1,
       .ulp_mode = ADC_ULP_MODE_DISABLE,
   };
-  ESP_ERROR_CHECK(adc_oneshot_new_unit(&init_config, &adc_handle));
+  esp_err_t err = adc_oneshot_new_unit(&init_config, &adc_handle);
+  ESP_ERROR_CHECK(err);
 
   adc_oneshot_chan_cfg_t chan_config = {
       .bitwidth = ADC_BITWIDTH_12,
@@ -44,7 +42,9 @@ void Battery_Init(void) {
   xTaskCreate(battery_monitor_task, "battery_task", 2048, NULL, 2, NULL);
 }
 
-float Battery_ReadV(void) {
-  float cv = current_voltage;
-  return cv;
+void Battery_Get(Battery_t *battery) { *battery = *battery; }
+
+void Battery_Set(float new_voltage, bool is_charging) {
+  battery.voltage = new_voltage;
+  battery.is_charging = is_charging;
 }

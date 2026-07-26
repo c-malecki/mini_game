@@ -1,5 +1,6 @@
 idf_component_register(
-    SRCS "game_engine.c" "src/controls.c" "src/display.c" "src/sound.c" "src/tracks.c"
+    SRCS "game_engine.c" "src/controls.c"
     INCLUDE_DIRS "include"
-    REQUIRES driver esp_lcd esp_driver_ledc esp_driver_i2c esp_timer sh1106
+    REQUIRES driver esp_driver_ledc esp_timer
+    PRIV_REQUIRES device_registry
 )
