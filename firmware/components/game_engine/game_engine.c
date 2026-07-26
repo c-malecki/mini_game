@@ -6,13 +6,13 @@ static Game_Engine_t game_engine;
 
 /************ GAME ENGINE **************/
 
-void GEng_Init(Player_t player) {
+void GEng_Init(Unit_t player) {
   game_engine.player = player;
   game_engine.player.x = 64;
   game_engine.player.y = 32;
-  game_engine.player.speed = 2;
+  game_engine.player.spd = 2;
 
-  DR_Init();
+  DReg_Init();
   ESP_LOGI("GAME_ENGINE", "Device Registry initialized");
   Controls_Init();
   ESP_LOGI("GAME_ENGINE", "Controls initialized");
@@ -20,16 +20,16 @@ void GEng_Init(Player_t player) {
 
 void GEng_LOOP_HandleInput(void) {
   if (Controls_IsPinHeld(CONTROLS_LEFT_PIN)) {
-    game_engine.player.x -= game_engine.player.speed;
+    game_engine.player.x -= game_engine.player.spd;
   }
   if (Controls_IsPinHeld(CONTROLS_RIGHT_PIN)) {
-    game_engine.player.x += game_engine.player.speed;
+    game_engine.player.x += game_engine.player.spd;
   }
   if (Controls_IsPinHeld(CONTROLS_UP_PIN)) {
-    game_engine.player.y -= game_engine.player.speed;
+    game_engine.player.y -= game_engine.player.spd;
   }
   if (Controls_IsPinHeld(CONTROLS_DOWN_PIN)) {
-    game_engine.player.y += game_engine.player.speed;
+    game_engine.player.y += game_engine.player.spd;
   }
 
   Controls_Buttons btn = Controls_GetPendingBtn();
@@ -53,16 +53,23 @@ void GEng_LOOP_HandleInput(void) {
     game_engine.player.y = 0;
   }
 
-  if (game_engine.player.x >= DISPLAY_WIDTH) {
-    game_engine.player.x = DISPLAY_WIDTH - 1;
+  if (game_engine.player.x > DISPLAY_WIDTH - game_engine.player.sprite->width) {
+    game_engine.player.x = DISPLAY_WIDTH - game_engine.player.sprite->width;
   }
 
-  if (game_engine.player.y >= DISPLAY_HEIGHT) {
-    game_engine.player.y = DISPLAY_HEIGHT - 1;
+  if (game_engine.player.y >=
+      DISPLAY_HEIGHT - game_engine.player.sprite->height) {
+    game_engine.player.y = DISPLAY_HEIGHT - game_engine.player.sprite->height;
   }
+
   GEng_PrintState();
   Controls_CleanUp();
 }
+/************ GAME **************/
+
+// set game
+void GEng_GAME_SetPlayer(Unit_t player) { game_engine.player = player; }
+void GEng_LoadGame(Game_t game) { game_engine.game = game; }
 
 void GEng_LOOP_Render() {
   // TODO: change so that position is set by game_engine.player
@@ -111,11 +118,6 @@ void GEng_SND_PlayTrack(const Track_t *track) { Sound_PlayTrack(track); }
 void GEng_SND_TogglePauseTrack(void) { Sound_TogglePauseTrack(); }
 
 void GEng_SND_PlaySfx(void) { Sound_TriggerSFX(); }
-
-/************ GAME **************/
-
-// set game
-void GEng_GAME_SetPlayer(Player_t player) { game_engine.player = player; }
 
 /************ DEBUG **************/
 

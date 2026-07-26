@@ -2,20 +2,21 @@
 #define __GAME_ENGINE_H_
 
 #include "controls.h"
-#include "player.h"
-#include "sprite.h"
+#include "game.h"
 #include "device_registry.h"
 #include "esp_log.h"
 
 typedef struct
 {
-    Player_t player;
+    Unit_t player;
     Controls_t controls;
+    Game_t game;
 } Game_Engine_t;
 
 /************ GAME ENGINE **************/
 
-void GEng_Init(Player_t player);
+void GEng_Init(Unit_t player);
+void GEng_LoadGame(Game_t game);
 
 void GEng_LOOP_HandleInput(void);
 void GEng_LOOP_Render(void);
@@ -40,7 +41,7 @@ void GEng_SND_PlaySfx(void);
 
 /************ GAME **************/
 
-void GEng_GAME_SetPlayer(Player_t player);
+void GEng_GAME_SetPlayer(Unit_t player);
 
 /************ DEBUG **************/
 

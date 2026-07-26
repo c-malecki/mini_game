@@ -29,44 +29,32 @@ void Display_Init(void) {
     ESP_LOGE("DISPLAY", "I2C new master bus error: 0x%X :: %d", err, err);
   }
 
-  // Create the i2c io handle
   esp_lcd_panel_io_handle_t io_handle = NULL;
   esp_lcd_panel_io_i2c_config_t io_config = ESP_SH1106_DEFAULT_IO_CONFIG;
   ESP_ERROR_CHECK(
       esp_lcd_new_panel_io_i2c(i2c_bus_handle, &io_config, &io_handle));
 
-  /* SCREEN CONFIGURATION */
-
-  // sh1106 panel configuration (most of the values are not used, but must be
-  // set to avoid cpp warnings)
   esp_lcd_panel_dev_config_t panel_config = {
-      .reset_gpio_num = -1, // sh1106 does not have a reset pin, so set to -1
-      .rgb_ele_order = LCD_RGB_ELEMENT_ORDER_RGB, // not even used, but must be
-                                                  // set to avoid cpp warnings
-      .data_endian = LCD_RGB_DATA_ENDIAN_LITTLE,  // not even used, but must be
-                                                  // set to avoid cpp warnings
-      .bits_per_pixel =
-          SH1106_PIXELS_PER_BYTE / 8, // bpp = 1 (monochrome, that's important)
+      .reset_gpio_num = -1,
+      .rgb_ele_order = LCD_RGB_ELEMENT_ORDER_RGB,
+
+      .data_endian = LCD_RGB_DATA_ENDIAN_LITTLE,
+
+      .bits_per_pixel = SH1106_PIXELS_PER_BYTE / 8,
       .flags =
           {
-              .reset_active_high =
-                  false, // not even used, but must be set to avoid cpp warnings
+              .reset_active_high = false,
           },
-      .vendor_config =
-          NULL, // no need for custom vendor config, not implemented
+      .vendor_config = NULL,
   };
 
-  // Create the panel handle from the sh1106 driver
   ESP_ERROR_CHECK(
       esp_lcd_new_panel_sh1106(io_handle, &panel_config, &panel_handle));
 
-  // Reset the screen (no reset pin, so it's a no-op here, optional)
   ESP_ERROR_CHECK(esp_lcd_panel_reset(panel_handle));
 
-  // Initialize the screen (this one isn't optional at all!)
   ESP_ERROR_CHECK(esp_lcd_panel_init(panel_handle));
 
-  // Turn on the screen (Easier to see something, right?)
   ESP_ERROR_CHECK(esp_lcd_panel_disp_on_off(panel_handle, true));
 
   Display_Clear();
@@ -317,7 +305,7 @@ void Display_ClearCirc(int xc, int yc, int r, bool fill) {
   }
 }
 
-void display_drawChar(int x, int y, char c, bool on) {
+void Display_DrawChar(int x, int y, char c, bool on) {
   unsigned char idx = (unsigned char)c;
   if (idx > 127)
     return;
@@ -359,7 +347,7 @@ void Display_ClearChar(int x, int y, char c) {
 void Display_DrawText(int x, int y, const char *text, bool on) {
   int cursor_x = x;
   while (*text) {
-    display_drawChar(cursor_x, y, *text, on);
+    Display_DrawChar(cursor_x, y, *text, on);
     cursor_x += FONT_7X12_WIDTH + 1; // 7px glyph + 1px spacing
     text++;
   }

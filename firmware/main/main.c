@@ -10,7 +10,7 @@ static float new_voltage;
 void app_main(void) {
   ESP_LOGI("Main", "start");
   Player_t player;
-  player.sprite = &ship_idle_sprite;
+  player.sprite = &SPRITE_PLAYER_SHIP;
   GEng_Init(player);
   ESP_LOGI("Main", "GEng_Init complete");
   // GEng_GAME_SetPlayer(player);
