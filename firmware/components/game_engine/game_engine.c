@@ -1,91 +1,123 @@
 #include "game_engine.h"
 #include "display.h"
 #include "esp_log.h"
+#include "game.h"
 
 static Game_Engine_t game_engine;
 
 /************ GAME ENGINE **************/
 
-void GEng_Init(Unit_t player) {
-  game_engine.player = player;
-  game_engine.player.x = 64;
-  game_engine.player.y = 32;
-  game_engine.player.spd = 2;
-
+void GEng_Init(Game_t *game) {
+  game_engine.game = game;
   DReg_Init();
-  ESP_LOGI("GAME_ENGINE", "Device Registry initialized");
-  Controls_Init();
-  ESP_LOGI("GAME_ENGINE", "Controls initialized");
+  Controls_Init(&game->controls);
 }
 
 void GEng_LOOP_HandleInput(void) {
-  if (Controls_IsPinHeld(CONTROLS_LEFT_PIN)) {
-    game_engine.player.x -= game_engine.player.spd;
-  }
-  if (Controls_IsPinHeld(CONTROLS_RIGHT_PIN)) {
-    game_engine.player.x += game_engine.player.spd;
-  }
-  if (Controls_IsPinHeld(CONTROLS_UP_PIN)) {
-    game_engine.player.y -= game_engine.player.spd;
-  }
-  if (Controls_IsPinHeld(CONTROLS_DOWN_PIN)) {
-    game_engine.player.y += game_engine.player.spd;
+  /* buttons */
+
+  if (Controls_IsPinActive(CONTROLS_PIN_CMD)) {
+    if (game_engine.game->controls.on_press_cmd != NULL) {
+      game_engine.game->controls.on_press_cmd();
+    }
   }
 
-  Controls_Buttons btn = Controls_GetPendingBtn();
-  switch (btn) {
-  case CONTROLS_BUTTON_CMD:
-    GEng_SND_TogglePauseTrack();
-    break;
-  case CONTROLS_BUTTON_A:
-    GEng_SND_PlaySfx();
-    break;
-  default:
-    break;
+  // int64_t cmd_held = Controls_GetPinActiveMS(CONTROLS_BTN_CMD);
+  // if (cmd_held >= 3000) { TODO: toggle deep sleep }
+
+  if (Controls_IsPinActive(CONTROLS_PIN_A)) {
+    if (game_engine.game->controls.on_press_cmd != NULL) {
+      game_engine.game->controls.on_press_a();
+    }
   }
 
-  // clamp to screen bounds
-  if (game_engine.player.x < 0) {
-    game_engine.player.x = 0;
+  // int64_t a_held = Controls_GetPinActiveMS(CONTROLS_BTN_A);
+  // if (a_held >= 3000) { }
+
+  if (Controls_IsPinActive(CONTROLS_PIN_B)) {
+    if (game_engine.game->controls.on_press_cmd != NULL) {
+      game_engine.game->controls.on_press_b();
+    }
   }
 
-  if (game_engine.player.y < 0) {
-    game_engine.player.y = 0;
+  // int64_t b_held = Controls_GetPinActiveMS(CONTROLS_BTN_B);
+  // if (b_held >= 3000) { }
+
+  /* movement/direction */
+
+  if (Controls_IsPinActive(CONTROLS_PIN_UP)) {
+    if (game_engine.game->controls.on_press_cmd != NULL) {
+      game_engine.game->controls.on_press_up();
+    }
   }
 
-  if (game_engine.player.x > DISPLAY_WIDTH - game_engine.player.sprite->width) {
-    game_engine.player.x = DISPLAY_WIDTH - game_engine.player.sprite->width;
+  if (Controls_IsPinActive(CONTROLS_PIN_DOWN)) {
+    if (game_engine.game->controls.on_press_cmd != NULL) {
+      game_engine.game->controls.on_press_down();
+    }
   }
 
-  if (game_engine.player.y >=
-      DISPLAY_HEIGHT - game_engine.player.sprite->height) {
-    game_engine.player.y = DISPLAY_HEIGHT - game_engine.player.sprite->height;
+  if (Controls_IsPinActive(CONTROLS_PIN_LEFT)) {
+    if (game_engine.game->controls.on_press_cmd != NULL) {
+      game_engine.game->controls.on_press_left();
+    }
   }
 
-  GEng_PrintState();
-  Controls_CleanUp();
+  if (Controls_IsPinActive(CONTROLS_PIN_RIGHT)) {
+    if (game_engine.game->controls.on_press_cmd != NULL) {
+      game_engine.game->controls.on_press_right();
+    }
+  }
+
+  if (game_engine.game->player.x < 0) {
+    game_engine.game->player.x = 0;
+  }
+
+  if (game_engine.game->player.y < 0) {
+    game_engine.game->player.y = 0;
+  }
+
+  if (game_engine.game->player.x >
+      DISPLAY_WIDTH - game_engine.game->player.sprite->width) {
+    game_engine.game->player.x =
+        DISPLAY_WIDTH - game_engine.game->player.sprite->width;
+  }
+
+  if (game_engine.game->player.y >=
+      DISPLAY_HEIGHT - game_engine.game->player.sprite->height) {
+    game_engine.game->player.y =
+        DISPLAY_HEIGHT - game_engine.game->player.sprite->height;
+  }
 }
-/************ GAME **************/
-
-// set game
-void GEng_GAME_SetPlayer(Unit_t player) { game_engine.player = player; }
-void GEng_LoadGame(Game_t game) { game_engine.game = game; }
 
 void GEng_LOOP_Render() {
-  // TODO: change so that position is set by game_engine.player
-  static int last_x = 64;
-  static int last_y = 32;
+  static int last_x = 0;
+  static int last_y = 0;
 
-  Display_ClearRect(last_x, last_y, game_engine.player.sprite->width,
-                    game_engine.player.sprite->height);
-  GEng_DSP_DrawSprite(game_engine.player.x, game_engine.player.y,
-                      game_engine.player.sprite, true);
+  Display_ClearRect(last_x, last_y, game_engine.game->player.sprite->width,
+                    game_engine.game->player.sprite->height);
+
+  GEng_DSP_DrawSprite(game_engine.game->player.x, game_engine.game->player.y,
+                      game_engine.game->player.sprite, true);
+
+  GEng_DSP_DrawSprite(game_engine.game->enemies[0].x,
+                      game_engine.game->enemies[0].y,
+                      game_engine.game->enemies[0].sprite, true);
 
   Display_Flush();
 
-  last_x = game_engine.player.x;
-  last_y = game_engine.player.y;
+  last_x = game_engine.game->player.x;
+  last_y = game_engine.game->player.y;
 }
+
+/************ GAME **************/
+
+void GEng_GAME_GetPlayer(Unit_t *player) { *player = game_engine.game->player; }
+
+void GEng_GAME_SetPlayerPos(int x, int y) {
+  game_engine.game->player.x = x;
+  game_engine.game->player.y = y;
+};
 
 /************ DISPLAY **************/
 
@@ -118,14 +150,3 @@ void GEng_SND_PlayTrack(const Track_t *track) { Sound_PlayTrack(track); }
 void GEng_SND_TogglePauseTrack(void) { Sound_TogglePauseTrack(); }
 
 void GEng_SND_PlaySfx(void) { Sound_TriggerSFX(); }
-
-/************ DEBUG **************/
-
-void GEng_PrintState(void) {
-  if (game_engine.controls.pending_btn != CONTROLS_BUTTON_NONE) {
-
-    ESP_LOGE("Game Engine", "pending btn: %d\nplayer x: %d\n player y: %d\n",
-             game_engine.controls.pending_btn, game_engine.player.x,
-             game_engine.player.y);
-  }
-}

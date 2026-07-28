@@ -1,4 +1,4 @@
-#include "units.h"
+#include "sprites.h"
 
 const uint8_t player_ship[] = {
     0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x50, 0x00, 0x00, 0x28, 0x00,
@@ -24,7 +24,7 @@ const uint8_t enemy_1[] = {0x00, 0x00, 0x00, 0x7c, 0x80, 0x00, 0xbb, 0x80, 0x00,
 
 const Sprite_t SPRITE_ENEMY_1 = {enemy_1, 17, 17};
 const Unit_t ENEMY_1 = {
-    .x = 127, .y = 32, .spd = 3, .hp = 3, .dmg = 1, .sprite = &SPRITE_ENEMY_1};
+    .x = 110, .y = 32, .spd = 3, .hp = 3, .dmg = 1, .sprite = &SPRITE_ENEMY_1};
 // //
 // const uint8_t enemy_2[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x38,
 // 0x00,

@@ -2,6 +2,7 @@
 #define __GAME_H_
 
 #include <stdint.h>
+#include "controls.h"
 
 typedef struct
 {
@@ -23,15 +24,11 @@ typedef struct
 
 typedef struct
 {
-
-} Game_Controls_t;
-
-typedef struct
-{
-    const char title;
-    Game_Controls_t controls;
+    Controls_t controls;
     Unit_t player;
     Unit_t enemies[];
 } Game_t;
+
+extern Game_t Galaga;
 
 #endif // __GAME_H_

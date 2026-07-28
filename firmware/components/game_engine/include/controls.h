@@ -4,36 +4,48 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define CONTROLS_A_PIN (1) // D1
-#define CONTROLS_B_PIN (0) // D0
-#define CONTROLS_UP_PIN (20) // D7
-#define CONTROLS_DOWN_PIN (18) // D8
-#define CONTROLS_LEFT_PIN (19) // D9
-#define CONTROLS_RIGHT_PIN (17) // D10
-#define CONTROLS_CMD_PIN (16) // D6
+#define CONTROLS_PIN_A (1) // D1
+#define CONTROLS_PIN_B (0) // D0
+#define CONTROLS_PIN_UP (20) // D7
+#define CONTROLS_PIN_DOWN (18) // D8
+#define CONTROLS_PIN_LEFT (19) // D9
+#define CONTROLS_PIN_RIGHT (17) // D10
+#define CONTROLS_PIN_CMD (16) // D6
 
 #define CONTROLS_DEBOUNCE_MS 200
 
-#define INPUT_PIN_BITMASK                                                                          \
-    ((1ULL << CONTROLS_B_PIN) | (1ULL << CONTROLS_A_PIN) | (1ULL << CONTROLS_UP_PIN)               \
-     | (1ULL << CONTROLS_DOWN_PIN) | (1ULL << CONTROLS_LEFT_PIN) | (1ULL << CONTROLS_RIGHT_PIN)    \
-     | (1ULL << CONTROLS_CMD_PIN))
+typedef void (*Controls_Button_CB_t)(void);
 
 typedef enum {
-    CONTROLS_BUTTON_NONE = 0,
-    CONTROLS_BUTTON_A,
-    CONTROLS_BUTTON_B,
-    CONTROLS_BUTTON_CMD
+    CONTROLS_BTN_B = 0,
+    CONTROLS_BTN_A,
+    CONTROLS_BTN_CMD,
+    CONTROLS_BTN_UP,
+    CONTROLS_BTN_DOWN,
+    CONTROLS_BTN_LEFT,
+    CONTROLS_BTN_RIGHT,
 } Controls_Buttons;
+
+#define INPUT_PIN_BITMASK                                                                          \
+    ((1ULL << CONTROLS_PIN_B) | (1ULL << CONTROLS_PIN_A) | (1ULL << CONTROLS_PIN_UP)               \
+     | (1ULL << CONTROLS_PIN_DOWN) | (1ULL << CONTROLS_PIN_LEFT) | (1ULL << CONTROLS_PIN_RIGHT)    \
+     | (1ULL << CONTROLS_PIN_CMD))
 
 typedef struct
 {
-    Controls_Buttons pending_btn;
+    Controls_Button_CB_t on_press_cmd;
+    Controls_Button_CB_t on_press_a;
+    Controls_Button_CB_t on_press_b;
+    Controls_Button_CB_t on_press_up;
+    Controls_Button_CB_t on_press_down;
+    Controls_Button_CB_t on_press_left;
+    Controls_Button_CB_t on_press_right;
 } Controls_t;
 
-void Controls_Init(void);
-Controls_Buttons Controls_GetPendingBtn(void);
-bool Controls_IsPinHeld(int pin);
-void Controls_CleanUp(void);
+void Controls_Init(const Controls_t *controls);
+void Controls_Register(const Controls_t *controls);
+
+bool Controls_IsPinActive(int pin);
+int64_t Controls_GetPinActiveMS(Controls_Buttons btn);
 
 #endif // __CONTROLS_DRIVER_H_

@@ -4,7 +4,9 @@
 #include "game_engine.h"
 
 extern const Unit_t UNIT_PLAYER;
+extern const Sprite_t SPRITE_PLAYER_SHIP;
 extern const Unit_t UNIT_ENEMY_1;
+extern const Sprite_t SPRITE_ENEMY_1;
 // extern const Unit_t UNIT_ENEMY_2;
 // extern const Unit_t UNIT_ENEMY_3;
 // extern const Unit_t UNIT_ENEMY_4;

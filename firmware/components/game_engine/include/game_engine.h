@@ -8,15 +8,12 @@
 
 typedef struct
 {
-    Unit_t player;
-    Controls_t controls;
-    Game_t game;
+    Game_t *game;
 } Game_Engine_t;
 
 /************ GAME ENGINE **************/
 
-void GEng_Init(Unit_t player);
-void GEng_LoadGame(Game_t game);
+void GEng_Init(Game_t *game);
 
 void GEng_LOOP_HandleInput(void);
 void GEng_LOOP_Render(void);
@@ -26,6 +23,11 @@ void GEng_LOOP_Render(void);
     - set player shape/speed/etc...
     - initial screen and everything etc...
 */
+
+/************ GAME **************/
+
+void GEng_GAME_GetPlayer(Unit_t *player);
+void GEng_GAME_SetPlayerPos(int x, int y);
 
 /************ DISPLAY **************/
 
@@ -38,13 +40,5 @@ void GEng_DSP_DrawSprite(int x, int y, const Sprite_t *sprite, bool on);
 void GEng_SND_PlayTrack(const Track_t *track);
 void GEng_SND_TogglePauseTrack(void);
 void GEng_SND_PlaySfx(void);
-
-/************ GAME **************/
-
-void GEng_GAME_SetPlayer(Unit_t player);
-
-/************ DEBUG **************/
-
-void GEng_PrintState(void);
 
 #endif // __GAME_ENGINE_H_
